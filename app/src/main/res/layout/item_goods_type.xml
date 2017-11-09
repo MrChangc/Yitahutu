@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/ll_rootView">
+
+    <RadioButton
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:text="热门推荐"
+        android:padding="10dp"
+        android:id="@+id/text_type_name"
+        android:button="@null"
+        android:textSize="@dimen/text_size_xlarge"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/goods_detail_text_selector"
+        android:background="@drawable/goods_recommend_type_bg_selector"/>
+</LinearLayout>

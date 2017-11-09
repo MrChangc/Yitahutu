@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yitahutu.cn">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/app_name"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:name=".MyApplication">
+        <meta-data
+            android:name="DATABASE"
+            android:value="yitahutu.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="false" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.yitahutu.cn.model" />
+
+        <activity android:name=".ui.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.AssetActivity" />
+        <activity android:name=".ui.activity.FinancingActivity" />
+        <activity android:name=".ui.activity.ShoppingActivity" />
+        <activity android:name=".ui.activity.ShoppingAllActivity" />
+        <activity android:name=".ui.activity.UserInfoActivity" />
+        <activity android:name=".ui.activity.UserLoginActivity" />
+        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity android:name=".ui.activity.MemberActivity" />
+        <activity android:name=".ui.activity.RechargeActivity" />
+        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.FinancingPastureActivity" />
+        <activity android:name=".ui.activity.RecommendListActivity" />
+        <activity android:name=".ui.activity.GoodsDetailActivity" />
+        <activity android:name=".ui.activity.AppStartActivity"/>
+        <activity android:name=".ui.activity.FinanceDetailActivity"/>
+        <activity android:name=".ui.activity.CartListActivity"/>
+        <activity android:name=".ui.activity.MallDetailBaseActivity"/>
+        <activity android:name=".ui.activity.AddressListActivity"/>
+        <activity android:name=".ui.activity.AddressDetailActivity"/>
+        <activity android:name=".ui.activity.FinanceBalanceActivity"/>
+        <activity android:name=".ui.activity.GoodsTypeListActivity"/>
+        <activity android:name=".ui.activity.BuySuccessActivity"/>
+    </application>
+
+</manifest>

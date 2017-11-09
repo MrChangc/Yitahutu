@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background">
+    <LinearLayout
+        android:background="@color/white"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/button_evaluate_all"
+            android:textColor="@drawable/goods_detail_text_selector"
+            android:padding="5dp"
+            android:text="全部"
+            android:textSize="@dimen/text_size_large"
+            android:background="@drawable/goods_detail_selector"
+            android:button="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/button_evaluate_good"
+            android:layout_marginLeft="10dp"
+            android:textColor="@drawable/goods_detail_text_selector"
+            android:padding="5dp"
+            android:text="好评"
+            android:textSize="@dimen/text_size_large"
+            android:background="@drawable/goods_detail_selector"
+            android:button="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/button_evaluate_normal"
+            android:layout_marginLeft="10dp"
+            android:textColor="@drawable/goods_detail_text_selector"
+            android:padding="5dp"
+            android:text="中评"
+            android:textSize="@dimen/text_size_large"
+            android:background="@drawable/goods_detail_selector"
+            android:button="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/button_evaluate_feedback"
+            android:layout_marginLeft="10dp"
+            android:textColor="@drawable/goods_detail_text_selector"
+            android:padding="5dp"
+            android:text="差评"
+            android:textSize="@dimen/text_size_large"
+            android:background="@drawable/goods_detail_selector"
+            android:button="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/list_evaluate"
+        android:divider="@color/color_background"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+</LinearLayout>
