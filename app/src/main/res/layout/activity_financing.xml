@@ -14,11 +14,13 @@
         android:padding="30dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/gray_point" />
+            android:id="@+id/image_user_head"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@color/color_background" />
 
         <TextView
+            android:id="@+id/text_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -119,6 +121,7 @@
             android:layout_marginRight="20dp"/>
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_financing_share_out_bonus"
         android:gravity="center_vertical"
         android:layout_marginTop="2dp"

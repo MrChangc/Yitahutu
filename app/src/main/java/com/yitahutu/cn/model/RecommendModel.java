@@ -15,6 +15,15 @@ public class RecommendModel {
     private int id;
     private String name;
 
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
+
+    private boolean isCheck;
     public int getId() {
         return id;
     }
@@ -30,4 +39,5 @@ public class RecommendModel {
     public void setName(String name) {
         this.name = name;
     }
+
 }

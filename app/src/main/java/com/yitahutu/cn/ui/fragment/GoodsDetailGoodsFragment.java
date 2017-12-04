@@ -20,17 +20,18 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.squareup.picasso.Picasso;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.ConstantUtils;
+import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.Utils.PreferUtil;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.ui.View.QdLoadingDialog;
 import com.yitahutu.cn.ui.activity.CartListActivity;
-import com.yitahutu.cn.ui.activity.FinanceBalanceActivity;
 import com.yitahutu.cn.ui.activity.GoodsDetailActivity;
-import com.yitahutu.cn.webservice.JsonObjectCallBack;
+import com.yitahutu.cn.ui.activity.MallBalanceActivity;
 import com.yitahutu.cn.webservice.WebService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +40,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import okhttp3.Call;
 
 /**
  * Created by Administrator on 2017\10\24 0024.
  */
 public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickListener {
+    @BindView(R.id.text_cart_total)
+    TextView textCartTotal;
+    @BindView(R.id.image_goto_cart)
+    ImageView imageGotoCart;
     private long id = -1;
     @BindView(R.id.Convenient_banner_goods_detail)
     ConvenientBanner ConvenientBannerGoodsDetail;
@@ -74,6 +78,8 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
     private View rootView;
     private List<String> images = new ArrayList<>();
     private GoodsModel goodsModel;
+    private int num = 1;
+    private double totalNum;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +87,7 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
         GoodsDetailActivity detailActivity = (GoodsDetailActivity) getActivity();
         id = detailActivity.getId();
         goodsModel = GoodsModel.findById(GoodsModel.class, id);
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -114,15 +121,16 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
 
         switch (view.getId()) {
             case R.id.image_add:
-                int addCount = Integer.valueOf(textGoodsCount.getText().length());
-                textGoodsCount.setText((addCount + 1)+"");
+                num++;
+                textGoodsCount.setText((num) + "");
                 break;
             case R.id.image_minus:
-                int count = Integer.valueOf(textGoodsCount.getText().toString());
-                if (count <= 1)
+                if (num <= 1)
                     Toast.makeText(getActivity(), "个数不能为零", Toast.LENGTH_SHORT).show();
-                else
-                    textGoodsCount.setText((count - 1)+"");
+                else {
+                    num--;
+                    textGoodsCount.setText((num) + "");
+                }
                 break;
             case R.id.ll_add_cart:
                 if (PreferUtil.isLogin())
@@ -137,55 +145,25 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
                     Toast.makeText(getActivity(), "请先登录!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.payment:
-                Intent intent  = new Intent(getActivity(), CartListActivity.class);
+                Intent intent = new Intent(getActivity(), CartListActivity.class);
                 getActivity().startActivity(intent);
                 break;
         }
     }
 
     private void llAddCart() {
-        loading();
-        WebService.addGoodsToCart(goodsModel.getId() + "", textGoodsCount.getText().toString(), new JsonObjectCallBack() {
-            String message = "";
-
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                message = "请求错误";
-                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                mLoadingDialog.dismiss();
-            }
-
-            @Override
-            public void onResponse(JSONObject response, int id) {
-                try {
-                    int code = response.getInt("code");
-                    if (code == 1)
-                        message = "参数为空";
-                    else if (code == 300)
-                        message = "登录过期";
-                    else if (code == 200) {
-//                                String data = response.getString("datas");
-//                                if (data != null && !TextUtils.isEmpty(data)) {
-                        message = "加入购物车成功!";
-//                                }
-                    }
-                } catch (JSONException e) {
-                    message = "请求错误";
-                    e.printStackTrace();
-                }
-                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                mLoadingDialog.dismiss();
-            }
-        });
+        WebService.addGoodsToCart(goodsModel.getId() + "", textGoodsCount.getText().toString(), getActivity());
     }
 
     private void gotoBalance() {
-        Intent intent = new Intent(getActivity(), FinanceBalanceActivity.class);
+        Intent intent = new Intent(getActivity(), MallBalanceActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("goods",goodsModel);
+        bundle.putSerializable("goods", goodsModel);
         intent.putExtras(bundle);
+        intent.putExtra("id", goodsModel.getId() + "");
         startActivity(intent);
     }
+
     private QdLoadingDialog mLoadingDialog;
 
     private void loading() {
@@ -202,7 +180,7 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
         if (allUrl.contains(";")) {
             String[] strings = allUrl.split(";");
             for (int i = 0; i < strings.length; i++) {
-                images.add(ConstantUtils.baseUrl+strings[i]);
+                images.add(ConstantUtils.baseUrl + strings[i]);
             }
         } else {
             images.add(allUrl);
@@ -233,6 +211,12 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
 
     }
 
+    @OnClick(R.id.image_goto_cart)
+    public void onViewClicked() {
+        Intent intent = new Intent(getActivity(),CartListActivity.class);
+        getActivity().startActivity(intent);
+    }
+
     private class LocalImageHolderView implements Holder<String> {
         private ImageView imageView;
 
@@ -252,4 +236,17 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(Event.AddGoodsToCart addGoodsToCart) {
+        num = 1;
+        totalNum = totalNum+(goodsModel.getPresentPrice() * num);
+        textCartTotal.setText(totalNum + "￥");
+        payment.setBackgroundColor(getResources().getColor(R.color.red));
+    }
 }

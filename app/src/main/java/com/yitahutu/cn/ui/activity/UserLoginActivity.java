@@ -3,6 +3,7 @@ package com.yitahutu.cn.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -60,11 +61,11 @@ public class UserLoginActivity extends BaseActivity {
     public void login(View view) {
         final String userName = editUserName.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
-        if (userName!=null&&password!=null)
+        if (userName != null && password != null)
             WebService.login(userName, password, new JsonObjectCallBack() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
-                    Toast.makeText(mContext,"网络异常",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "网络异常", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -80,17 +81,18 @@ public class UserLoginActivity extends BaseActivity {
                             message = "手机号未注册";
                         else if (code == 4)
                             message = "密码不正确";
-                        else if (code == 200){
+                        else if (code == 200) {
                             message = "登录成功";
                             String data = response.getString("datas");
                             JSONObject jsonObject = new JSONObject(data);
                             String token = jsonObject.getString("token");
-                            PreferUtil.setToken(userName,token);
+                            PreferUtil.setToken(userName, token);
                             PreferUtil.setUserName(userName);
                             PreferUtil.putLogin(true);
                             EventBus.getDefault().post(new Event.LoginEvent());
                             WebService.getUserInfoModel(token, new JsonObjectCallBack() {
                                 String message = "";
+
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
                                     message = "获取用户信息失败！";
@@ -109,15 +111,16 @@ public class UserLoginActivity extends BaseActivity {
                                             message = "获取用户信息成功";
                                             String data = response.getString("datas");
                                             UserInfoModel userInfoModel = GsonUtils.parserJsonObjectToUserInfoModel(data);
-                                            if (userInfoModel!=null)
+                                            if (userInfoModel != null)
                                                 userInfoModel.save();
+                                            EventBus.getDefault().post(new Event.UserInfoEvent());
                                             WebService.getAddressList(mContext);
                                         }
                                     } catch (JSONException e) {
                                         message = "请求错误";
                                         e.printStackTrace();
+                                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                                     }
-                                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -125,7 +128,7 @@ public class UserLoginActivity extends BaseActivity {
                         message = "请求错误";
                         e.printStackTrace();
                     }
-                    Toast.makeText(mContext,message,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                 }
             });
     }
@@ -135,14 +138,25 @@ public class UserLoginActivity extends BaseActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
+
     @OnClick(R.id.text_member)
     public void setTextMember() {
         Intent intent = new Intent(this, MemberActivity.class);
         startActivity(intent);
     }
+
     @OnClick(R.id.text_forget_password)
     public void setTextForgetPassword() {
         String phone = editUserName.getText().toString().trim();
-        WebService.sendMember(this,phone,"1");
+        WebService.sendMember(this, phone, "1");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -1,20 +1,18 @@
 package com.yitahutu.cn.ui.activity;
 
-import android.annotation.TargetApi;
-import android.app.Dialog;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.yitahutu.cn.MyApplication;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.CartListModel;
-import com.yitahutu.cn.ui.View.PaymentDialog;
+import com.yitahutu.cn.ui.View.RefreshableView;
 import com.yitahutu.cn.ui.adapter.CartListAdpater;
 import com.yitahutu.cn.webservice.WebService;
 
@@ -39,12 +37,16 @@ public class CartListActivity extends BaseActivity {
     TextView textTotal;
     @BindView(R.id.payment)
     LinearLayout payment;
+    @BindView(R.id.text_no_data)
+    TextView textNoData;
+    @BindView(R.id.refresh_view)
+    RefreshableView refreshView;
     private CartListAdpater listAdpater;
     private List<CartListModel> cartListModels = new ArrayList<>();
 
     @Override
     void setRightIconListener() {
-        WebService.getCartList(0, mContext);
+        WebService.getCartList(0, mContext,refreshView);
     }
 
     @Override
@@ -53,8 +55,15 @@ public class CartListActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         setContentView("购物车", R.layout.activity_cart_list);
         ButterKnife.bind(this);
+        refreshView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
+            @Override
+            public void onRefresh() {
+                WebService.getCartList(0, mContext,refreshView);
+            }
+        },getTaskId());
         initList();
-        WebService.getCartList(0, mContext);
+        setRightIconVisibility(true);
+        WebService.getCartList(0, mContext,refreshView);
     }
 
     private void initList() {
@@ -62,6 +71,13 @@ public class CartListActivity extends BaseActivity {
         cartListModels.addAll(models);
         listAdpater = new CartListAdpater(mContext, cartListModels);
         listCartGoods.setAdapter(listAdpater);
+        if (models.size() > 0) {
+            textNoData.setVisibility(View.GONE);
+            refreshView.setVisibility(View.VISIBLE);
+        } else {
+            textNoData.setVisibility(View.VISIBLE);
+            refreshView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -75,6 +91,13 @@ public class CartListActivity extends BaseActivity {
         cartListModels.clear();
         cartListModels.addAll(listEvent.financeModels);
         listAdpater.notifyDataSetChanged();
+        if (cartListModels.size() > 0) {
+            textNoData.setVisibility(View.GONE);
+            refreshView.setVisibility(View.VISIBLE);
+        } else {
+            textNoData.setVisibility(View.VISIBLE);
+            refreshView.setVisibility(View.GONE);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -93,7 +116,24 @@ public class CartListActivity extends BaseActivity {
 
     @OnClick(R.id.payment)
     public void setPayment() {
-
+        ArrayList<CartListModel> cartListModels = listAdpater.getModels();
+        if (cartListModels != null && cartListModels.size() > 0) {
+            String cartList = "";
+            for (int i = 0; i < cartListModels.size(); i++) {
+                if (i == 0)
+                    cartList = cartListModels.get(i).getId() + "";
+                else
+                    cartList = cartList + "," + cartListModels.get(i).getId();
+            }
+            Intent intent = new Intent(mContext, MallBalanceActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("list", cartListModels);
+            intent.putExtras(bundle);
+            intent.putExtra("id_list", cartList);
+            startActivity(intent);
+        } else {
+            Toast.makeText(mContext, "未选择商品!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

@@ -1,8 +1,12 @@
 package com.yitahutu.cn.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.Event;
@@ -13,6 +17,9 @@ import com.yitahutu.cn.ui.fragment.UserInfoFragment;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +40,7 @@ public class MainActivity extends BaseActivity {
     RadioButton contactRadio4;
     @BindView(R.id.bottom_layout)
     LinearLayout bottomLayout;
-
+    private boolean isExit;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +48,11 @@ public class MainActivity extends BaseActivity {
         setContentView("首页", R.layout.activity_main);
         ButterKnife.bind(this);
         setMiddleText("首页");
-        setLeftButtontVisibility(true);
+        setLeftButtontVisibility(false);
         setRightIconVisibility(true);
+        initFragment();
         if (isBalance)
             setContactRadio3();
-        else
-            initFragment();
     }
 
     private void initFragment() {
@@ -102,7 +108,7 @@ public class MainActivity extends BaseActivity {
         contactRadio3.setChecked(false);
         contactRadio4.setChecked(false);
         setMiddleText("牧场");
-        setRightIconVisibility(true);
+        setRightIconVisibility(false);
     }
 
     @OnClick(R.id.contact_radio3)
@@ -130,7 +136,34 @@ public class MainActivity extends BaseActivity {
         contactRadio3.setChecked(false);
         contactRadio4.setChecked(true);
         setMiddleText("我的");
-        setRightIconVisibility(true);
+        setRightIconVisibility(false);
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            exitByDoubleClick();
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+    private void exitByDoubleClick() {
+        Timer tExit=null;
+        if(!isExit){
+            isExit=true;
+            Toast.makeText(MainActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+            tExit=new Timer();
+            tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit=false;//取消退出
+                }
+            },2000);// 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+        }else{
+            moveTaskToBack(true
+            );
+            System.exit(0);
+        }
     }
 }

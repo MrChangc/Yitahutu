@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
@@ -61,11 +65,15 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
     LinearLayout llTwo;
     @BindView(R.id.ll_three)
     LinearLayout llThree;
+    @BindView(R.id.edit_search)
+    EditText editSearch;
+    LinearLayout contextView;
     private View rootView;
     private ConvenientBanner convenientBanner;
     private List<String> images = new ArrayList<>();
     private GoodsAdapter goodsAdapter;
     private List<GoodsModel> goodsModels = new ArrayList<>();
+    private List<GoodsModel> recommentGoodsModels = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,17 +85,34 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_mall, null);
+        WebService.getGoodsList(getActivity());
+        images.clear();
         convenientBanner = (ConvenientBanner) rootView.findViewById(R.id.convenientBanner);
-        if (PreferUtil.isLogin()) {
-            WebService.getGoodsList(getActivity());
-            WebService.getRecommendGoodsList(getActivity(), images);
-        }
-        //设置翻页的效果，不需要翻页效果可用不设
-        //setPageTransformer(Transformer.DefaultTransformer);   // 集成特效之后会有白屏现象，新版已经分离，如果要集成特效的例子可以看Demo的点击响应。
+//        convenientBanner.setOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                GoodsModel goodsModel = recommentGoodsModels.get(position);
+//                if (goodsModel != null) {
+//                    Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+//                    intent.putExtra("goods_id", goodsModel.getId());
+//                    getActivity().startActivity(intent);
+//                }
+//            }
+//        });
+        WebService.getRecommendGoodsList(getActivity(), images);
         unbinder = ButterKnife.bind(this, rootView);
         scrollView.smoothScrollTo(0, 0);
         initAdapter();
         listGoods.setOnItemClickListener(this);
+        editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                String name = textView.getText().toString();
+                WebService.getGoodsListBySerch(getActivity(), name, "", "", "", "", "", "",null);
+                return true;
+            }
+        });
+        loadCarouselFigure();
 
         return rootView;
     }
@@ -128,7 +153,12 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
 
     @Override
     public void onItemClick(int position) {
-
+        GoodsModel goodsModel = recommentGoodsModels.get(position);
+        if (goodsModel != null) {
+            Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+            intent.putExtra("goods_id", goodsModel.getId());
+            getActivity().startActivity(intent);
+        }
     }
 
     @Override
@@ -173,7 +203,7 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
 
     private void gotoGoodsScreenActivity(int id) {
         Intent intent = new Intent(getActivity(), GoodsTypeListActivity.class);
-        intent.putExtra("id",id);
+        intent.putExtra("id", id);
         getActivity().startActivity(intent);
     }
 
@@ -190,6 +220,10 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
         @Override
         public void UpdateUI(Context context, int position, String data) {
 //            OkHttpGlideModule.w
+            if (images.size() <= 0) {
+                imageView.setImageResource(R.mipmap.defult_convenient_banner);
+                return;
+            }
             Picasso.with(getActivity())
                     .load(data)
                     .into(imageView);
@@ -198,6 +232,7 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void initCarouselFigure(Event.RecommendGoodsEvent goodsEvent) {
+        recommentGoodsModels.addAll(goodsEvent.goodsModels);
         loadCarouselFigure();
     }
 
@@ -210,8 +245,17 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(Event.GoodsBySearch goodsEvent) {
+        goodsModels.clear();
+        goodsModels.addAll(goodsEvent.goodsModels);
+        if (goodsAdapter != null)
+            goodsAdapter.notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(Event.LoginEvent loginEvent) {
         WebService.getGoodsList(getActivity());
+        images.clear();
         WebService.getRecommendGoodsList(getActivity(), images);
     }
 
@@ -223,8 +267,12 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
 
     @OnClick(R.id.image_shop_car)
     public void setImageShopCar() {
-        Intent intent = new Intent(getActivity(), CartListActivity.class);
-        getActivity().startActivity(intent);
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), CartListActivity.class);
+            getActivity().startActivity(intent);
+        } else
+            Toast.makeText(getActivity(), "请先登录!", Toast.LENGTH_SHORT);
+
     }
 
 }

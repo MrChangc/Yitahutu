@@ -17,5 +17,8 @@
         <item name="android:textSize">@dimen/text_size_xlarge</item>
         <item name="android:textColor">@color/black</item>
     </style>
-
+    <style name="style_checkbox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
 </resources>

@@ -12,10 +12,12 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.CartListModel;
 import com.yitahutu.cn.ui.View.QdLoadingDialog;
 import com.yitahutu.cn.webservice.JsonObjectCallBack;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +37,7 @@ import okhttp3.Call;
 public class CartListAdpater extends BaseAdapter {
     private Context mContext;
     private List<CartListModel> cartListModels;
-    private List<CartListModel> models = new ArrayList<>();
+    private ArrayList<CartListModel> models = new ArrayList<>();
 
     public CartListAdpater(Context mContext, List<CartListModel> cartListModels) {
         this.mContext = mContext;
@@ -70,7 +72,8 @@ public class CartListAdpater extends BaseAdapter {
         }
         viewHolder.textCount.setText(cartListModel.getNum() + "");
         viewHolder.textGoodsDescribe.setText(cartListModel.getName());
-        Picasso.with(mContext).load(cartListModel.getUrl()).into(viewHolder.imageGoods);
+        viewHolder.textGoodsPrice.setText(cartListModel.getPresentPrice()+"");
+        Picasso.with(mContext).load(ConstantUtils.baseUrl+cartListModel.getUrl()).into(viewHolder.imageGoods);
         viewHolder.checkCartList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,16 +91,28 @@ public class CartListAdpater extends BaseAdapter {
         viewHolder.cartListDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WebService.deleteCartList(cartListModel.getId() + "", mContext);
+                WebService.deleteCartList(cartListModel.getId() + "", mContext, new SuccessCallBack() {
+                    @Override
+                    public void callBack() {
+                        cartListModels.remove(cartListModel);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void callBackToObject(Object o) {
+
+                    }
+                });
             }
         });
         final ViewHolder finalViewHolder = viewHolder;
+        final ViewHolder finalViewHolder1 = viewHolder;
         viewHolder.imageAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loading();
                 if (cartListModel != null) {
-                    final int num = cartListModel.getNum() + 1;
+                   final int num = cartListModel.getNum() + 1;
                     WebService.addCartList(cartListModel.getId() + "", num + "", mContext, new JsonObjectCallBack() {
                         String message = "";
 
@@ -112,22 +127,28 @@ public class CartListAdpater extends BaseAdapter {
                         public void onResponse(JSONObject response, int id) {
                             try {
                                 int code = response.getInt("code");
-                                if (code == 1)
+                                if (code == 1){
                                     message = "参数为空";
-                                else if (code == 300)
+                                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                                }
+                                else if (code == 300){
                                     message = "登录过期";
+                                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                                }
                                 else if (code == 200) {
-                                    finalViewHolder.textCount.setText(num + "");
-//                                    String data = response.getString("datas");
-//                                    if (data != null && !TextUtils.isEmpty(data)) {
-                                    message = "添加成功";
-//                                    }
+//                                        String data = response.getString("datas");
+//                                        if (data != null && !TextUtils.isEmpty(data)) {
+                                    message = "";
+//                                        }
+                                    cartListModel.setNum(num);
+                                    cartListModel.save();
+                                    notifyDataSetChanged();
                                 }
                             } catch (JSONException e) {
                                 message = "请求错误";
                                 e.printStackTrace();
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                             mLoadingDialog.dismiss();
                         }
                     });
@@ -139,7 +160,7 @@ public class CartListAdpater extends BaseAdapter {
             public void onClick(View view) {
                 if (cartListModel != null) {
 
-                    int num = cartListModel.getNum() - 1;
+                    final int num = cartListModel.getNum() - 1;
                     if (num <= 0)
                         Toast.makeText(mContext, "数量不能少于1", Toast.LENGTH_SHORT).show();
                     else {
@@ -158,21 +179,27 @@ public class CartListAdpater extends BaseAdapter {
                             public void onResponse(JSONObject response, int id) {
                                 try {
                                     int code = response.getInt("code");
-                                    if (code == 1)
+                                    if (code == 1){
                                         message = "参数为空";
-                                    else if (code == 300)
+                                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                                    }
+                                    else if (code == 300){
                                         message = "登录过期";
+                                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                                    }
                                     else if (code == 200) {
-                                        String data = response.getString("datas");
-                                        if (data != null && !TextUtils.isEmpty(data)) {
-                                            message = data;
-                                        }
+//                                        String data = response.getString("datas");
+//                                        if (data != null && !TextUtils.isEmpty(data)) {
+                                            message = "";
+                                        cartListModel.setNum(num);
+                                        cartListModel.save();
+                                        notifyDataSetChanged();
                                     }
                                 } catch (JSONException e) {
                                     message = "请求错误";
                                     e.printStackTrace();
+                                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                                 }
-                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                                 mLoadingDialog.dismiss();
                             }
                         });
@@ -206,7 +233,7 @@ public class CartListAdpater extends BaseAdapter {
         }
     }
 
-    public List<CartListModel> getModels() {
+    public ArrayList<CartListModel> getModels() {
         return models;
     }
 

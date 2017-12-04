@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/color_background">
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -70,9 +71,11 @@
     <LinearLayout
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="130dp">
+        android:layout_height="200dp"
+        android:background="@mipmap/main_fragment_top_bg">
     </LinearLayout>
     <LinearLayout
+        android:gravity="center_vertical"
         android:layout_marginLeft="30dp"
         android:orientation="horizontal"
         android:layout_marginTop="5dp"
@@ -81,8 +84,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/titlebar_left_arrow_icon"/>
+            android:src="@mipmap/main_fragment_gift_box"/>
         <TextView
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
             android:textSize="@dimen/text_size_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

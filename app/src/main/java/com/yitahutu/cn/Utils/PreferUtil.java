@@ -69,6 +69,13 @@ public class PreferUtil {
     public static void putLogin(boolean isLogin) {
         spHelper.putBoolean("is_login", isLogin);
     }
+    public static boolean isNetWork() {
+        return spHelper.getBoolean("is_network", false);
+    }
+
+    public static void putNetWork(boolean isLogin) {
+        spHelper.putBoolean("is_network", isLogin);
+    }
 
 
 }

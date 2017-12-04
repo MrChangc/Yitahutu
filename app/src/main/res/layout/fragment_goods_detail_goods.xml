@@ -6,7 +6,7 @@
     <com.bigkoo.convenientbanner.ConvenientBanner
         android:id="@+id/Convenient_banner_goods_detail"
         android:layout_width="match_parent"
-        android:layout_height="160dp">
+        android:layout_height="200dp">
 
     </com.bigkoo.convenientbanner.ConvenientBanner>
     <LinearLayout
@@ -84,8 +84,8 @@
             <ImageView
                 android:id="@+id/image_add"
                 android:layout_marginLeft="10dp"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@mipmap/mall_goods_add"/>
             <TextView
                 android:id="@+id/text_goods_count"
@@ -96,10 +96,11 @@
                 android:layout_height="wrap_content"
                 android:text="1"/>
             <ImageView
+                android:padding="5dp"
                 android:id="@+id/image_minus"
                 android:layout_marginLeft="10dp"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@mipmap/mall_goods_minus"/>
             <TextView
                 android:layout_marginLeft="30dp"
@@ -171,12 +172,19 @@
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
+
     <LinearLayout
         android:layout_gravity="bottom"
         android:background="@color/white"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp">
+        <ImageView
+            android:id="@+id/image_goto_cart"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/mall_green_bg_cart"/>
         <LinearLayout
             android:orientation="horizontal"
             android:gravity="center_vertical|center"
@@ -184,6 +192,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
+                android:visibility="gone"
+                android:id="@+id/text_cart_total"
                 android:layout_marginRight="15dp"
                 android:text="购物车为空"
                 android:textColor="@color/gray"
@@ -191,6 +201,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/add_cart"
+            android:gravity="center"
+            android:background="@color/orange"
+            android:layout_width="100dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:text="加入购物车"
+                android:textColor="@color/color_background"
+                android:textSize="@dimen/text_size_xlarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/payment"

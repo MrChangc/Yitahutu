@@ -6,8 +6,8 @@
     android:id="@+id/ll_rootView">
 
     <RadioButton
+        android:checked="false"
         android:gravity="center"
-        android:layout_margin="10dp"
         android:text="热门推荐"
         android:padding="10dp"
         android:id="@+id/text_type_name"

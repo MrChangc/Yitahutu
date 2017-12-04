@@ -25,7 +25,19 @@ public class TimeUtils {
     }
 
     public static String getTime3(long time) {
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String date = sDateFormat.format(time);
+
+        return date;
+    }
+    public static String getTime4(long time) {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMdd");
+        String date = sDateFormat.format(time);
+
+        return date;
+    }
+    public static String getTime5(long time) {
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = sDateFormat.format(time);
 
         return date;

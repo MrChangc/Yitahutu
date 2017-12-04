@@ -38,6 +38,8 @@ public class GoodsModel extends SugarRecord implements Serializable {
     private int typeId;
     private String url;
     private String monthSales;
+    private String detailsUrl;
+
 
     public String getCoverUrl() {
         return coverUrl;
@@ -133,6 +135,13 @@ public class GoodsModel extends SugarRecord implements Serializable {
 
     public void setMonthSales(String monthSales) {
         this.monthSales = monthSales;
+    }
+    public String getDetailsUrl() {
+        return detailsUrl;
+    }
+
+    public void setDetailsUrl(String detailsUrl) {
+        this.detailsUrl = detailsUrl;
     }
 
 }

@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.PreferUtil;
 import com.yitahutu.cn.ui.activity.FinancingPastureActivity;
 
 import butterknife.BindView;
@@ -51,8 +53,12 @@ public class PastureFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rel_cowboy:
-                Intent intent = new Intent(getActivity(), FinancingPastureActivity.class);
-                getActivity().startActivity(intent);
+//                if (PreferUtil.isLogin()){
+
+                    Intent intent = new Intent(getActivity(), FinancingPastureActivity.class);
+                    getActivity().startActivity(intent);
+//                }else
+//                    Toast.makeText(getActivity(),"请先登录!",Toast.LENGTH_SHORT);
                 break;
             case R.id.rel_financing:
                 break;

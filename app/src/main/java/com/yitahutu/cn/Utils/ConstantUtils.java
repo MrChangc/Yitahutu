@@ -8,4 +8,7 @@ public class ConstantUtils {
     public static final String default_token = "44f27dd5-fba5-45ba-8d68-fca1c7cc6b66";
     public static final int version = 10025;
     public static  long time = System.currentTimeMillis();
+    public static final int TYPE_NONE = -1;
+    public static final int TYPE_MOBILE = 0;
+    public static final int TYPE_WIFI = 1;
 }

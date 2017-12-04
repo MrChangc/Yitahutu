@@ -2,8 +2,8 @@
 <resources>
     <color name="title_back_ground">#2B9B39</color>
     <color name="colorPrimary">#0000FF</color>
-    <color name="colorPrimaryDark">#1bc9d1</color>
-    <color name="colorAccent">#008000</color>
+    <color name="colorPrimaryDark">#33008000</color>
+    <color name="colorAccent">#2B9B39</color>
     <color name="white">#FFFFFF</color>
     <color name="ivory">#FFFFF0</color>
     <color name="lightyellow">#FFFFE0</color>

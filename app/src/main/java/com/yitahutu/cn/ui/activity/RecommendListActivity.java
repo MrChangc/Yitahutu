@@ -3,6 +3,7 @@ package com.yitahutu.cn.ui.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import com.yitahutu.cn.ui.adapter.GoodsTypeAdapter;
 import com.yitahutu.cn.ui.adapter.RecommendGoodsAdapter;
 import com.yitahutu.cn.webservice.WebService;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -49,13 +51,23 @@ public class RecommendListActivity extends Activity {
     private List<GoodsModel> goodsModels = new ArrayList<>();
     private List<RecommendModel> recommendModels = new ArrayList<>();
     private int position = 0;
+    private String recommendId = "";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_recommend_list);
         ButterKnife.bind(this);
         initList();
         initGrid();
+        titleEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                WebService.getGoodsListBySerch(RecommendListActivity.this,
+                        textView.getText().toString(),recommendId,"","","","","",null);
+                return true;
+            }
+        });
         WebService.getRecommendList(this);
     }
 
@@ -79,12 +91,13 @@ public class RecommendListActivity extends Activity {
         recommendListType.setAdapter(goodsTypeAdapter);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshList(Event.RecommendGoodsEvent goodsEvent){
+    public void refreshList(Event.RecommendListEvent goodsEvent){
         List<RecommendModel> models = PreferUtil.getRecommendModelList();
         recommendModels.clear();
         recommendModels.addAll(models);
         goodsTypeAdapter.notifyDataSetChanged();
         RecommendModel recommendModel = models.get(0);
+        recommendId = recommendModel.getId()+"";
         WebService.getGoodsListByRecommend(this,recommendModel.getId());
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -93,6 +106,17 @@ public class RecommendListActivity extends Activity {
         goodsModels.addAll(goodsEvent.goodsModels);
         recommendGoodsAdapter.notifyDataSetChanged();
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshGrid(Event.GoodsBySearch goodsEvent){
+        goodsModels.clear();
+        goodsModels.addAll(goodsEvent.goodsModels);
+        recommendGoodsAdapter.notifyDataSetChanged();
+    }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    
 }

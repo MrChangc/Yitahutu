@@ -7,11 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.CartListModel;
-import com.yitahutu.cn.ui.activity.MallDetailBaseActivity;
+import com.yitahutu.cn.ui.View.RefreshableView;
 import com.yitahutu.cn.ui.adapter.CartListDetailAdapter;
 import com.yitahutu.cn.webservice.WebService;
 
@@ -33,6 +34,10 @@ public class MallDetailBaseFragment extends Fragment {
     @BindView(R.id.list_cart_detail)
     ListView listCartDetail;
     Unbinder unbinder;
+    @BindView(R.id.text_no_data)
+    TextView textNoData;
+    @BindView(R.id.refresh_view)
+    RefreshableView refreshView;
     private View rootView;
     private int state;
     private CartListDetailAdapter cartListDetailAdapter;
@@ -49,10 +54,16 @@ public class MallDetailBaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_mall_detail, null);
         unbinder = ButterKnife.bind(this, rootView);
+        refreshView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
+            @Override
+            public void onRefresh() {
+                WebService.getCartList(state, getActivity(),refreshView);
+            }
+        },getId());
         initAdapter();
         if (state != -1)
-            WebService.getCartList(state, getActivity());
-        return rootView;
+            WebService.getCartList(state, getActivity(),refreshView);
+            return rootView;
     }
 
     private void initAdapter() {
@@ -62,6 +73,13 @@ public class MallDetailBaseFragment extends Fragment {
         models.addAll(cartListModels);
         cartListDetailAdapter = new CartListDetailAdapter(getActivity(), models);
         listCartDetail.setAdapter(cartListDetailAdapter);
+        if (models.size() > 0) {
+            listCartDetail.setVisibility(View.VISIBLE);
+            textNoData.setVisibility(View.GONE);
+        } else {
+            listCartDetail.setVisibility(View.GONE);
+            textNoData.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -72,11 +90,19 @@ public class MallDetailBaseFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(Event.CartListEvent listEvent) {
-        if (listEvent.state == state){
+        if (listEvent.state == state) {
             models.clear();
             models.addAll(listEvent.financeModels);
-            if (cartListDetailAdapter != null)
-                cartListDetailAdapter.notifyDataSetChanged();
+            if (models.size() > 0) {
+                refreshView.setVisibility(View.VISIBLE);
+                textNoData.setVisibility(View.GONE);
+                if (cartListDetailAdapter != null)
+                    cartListDetailAdapter.notifyDataSetChanged();
+            } else {
+                refreshView.setVisibility(View.GONE);
+                textNoData.setVisibility(View.VISIBLE);
+            }
+
         }
     }
 

@@ -39,6 +39,7 @@ public class CartListModel extends SugarRecord implements Serializable {
     private String name;
     private int num;
     private String orderNumber;
+    private String transNumber;
     private double originalPrice;
     private double presentPrice;
     private String region;
@@ -192,5 +193,13 @@ public class CartListModel extends SugarRecord implements Serializable {
 
     public void setCheck(boolean check) {
         isCheck = check;
+    }
+
+    public String getTransNumber() {
+        return transNumber;
+    }
+
+    public void setTransNumber(String transNumber) {
+        this.transNumber = transNumber;
     }
 }

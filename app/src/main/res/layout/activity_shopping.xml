@@ -36,7 +36,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/my_user_total"/>
+            android:src="@mipmap/mall_detail_all"/>
         <TextView
             android:text="全部"
             android:textSize="@dimen/text_size_xlarge"
@@ -160,9 +160,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/mall_detail_coupon"/>
         <TextView
             android:text="卡卷包"
             android:textSize="@dimen/text_size_xlarge"
@@ -181,9 +181,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/mall_detail_share"/>
         <TextView
             android:text="我的分享"
             android:textSize="@dimen/text_size_xlarge"
@@ -202,9 +202,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/mall_detail_member"/>
         <TextView
             android:text="会员中心"
             android:textSize="@dimen/text_size_xlarge"

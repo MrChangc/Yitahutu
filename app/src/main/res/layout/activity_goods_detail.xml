@@ -5,36 +5,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background">
-    <LinearLayout
-        android:background="@color/title_back_ground"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/image_title_left"
-            android:layout_marginLeft="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/titlebar_left_arrow_icon"/>
-        <android.support.design.widget.TabLayout
-            android:layout_marginLeft="15dp"
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@color/title_back_ground"
-            app:tabIndicatorColor="@color/white"
-            app:tabIndicatorHeight="3dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/white"
-            />
-    </LinearLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_page_mall_detail"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_goods_info"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:background="@color/title_back_ground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/image_title_left"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/titlebar_left_arrow_icon"/>
+                <android.support.design.widget.TabLayout
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@color/title_back_ground"
+                    app:tabIndicatorColor="@color/white"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/white"
+                    app:tabTextColor="@color/white"
+                    />
+            </LinearLayout>
 
-    </android.support.v4.view.ViewPager>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_page_mall_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v4.view.ViewPager>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/text_no_data"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_xlarge"
+            android:text="亲，断网啦!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
 </LinearLayout>

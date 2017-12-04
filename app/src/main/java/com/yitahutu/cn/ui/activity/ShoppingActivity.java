@@ -52,7 +52,9 @@ public class ShoppingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_mall_detail_all:
-                gotoCartActivity(0);
+                Intent intent = new Intent(mContext,ConsumeListActivity.class);
+                intent.putExtra("type",6);
+                startActivity(intent);
                 break;
             case R.id.ll_mall_detail_obligation:
                 gotoCartActivity(1);
@@ -67,6 +69,8 @@ public class ShoppingActivity extends BaseActivity {
                 gotoCartActivity(4);
                 break;
             case R.id.ll_mall_detail_refund:
+                Intent intent1 = new Intent(mContext,RefundActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.ll_mall_detail_coupon:
                 break;

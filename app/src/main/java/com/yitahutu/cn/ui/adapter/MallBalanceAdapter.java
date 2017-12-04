@@ -1,6 +1,7 @@
 package com.yitahutu.cn.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,7 +10,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.CartListModel;
+import com.yitahutu.cn.ui.activity.BuySuccessActivity;
+import com.yitahutu.cn.webservice.SuccessCallBack;
+import com.yitahutu.cn.webservice.WebService;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -80,7 +88,13 @@ public class MallBalanceAdapter extends BaseAdapter {
             viewHolder.cartListDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+//                    WebService.deleteCartList(cartListModel.getId() + "", mContext, new SuccessCallBack() {
+//                        @Override
+//                        public void callBack() {
+//                            cartListModels.remove(cartListModel);
+//                            notifyDataSetChanged();
+//                        }
+//                    });
                 }
             });
         }
@@ -111,4 +125,5 @@ public class MallBalanceAdapter extends BaseAdapter {
             ButterKnife.bind(this, view);
         }
     }
+
 }

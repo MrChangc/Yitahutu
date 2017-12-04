@@ -104,6 +104,9 @@ public abstract class BaseActivity extends FragmentActivity {
     public void setRightText(String text) {
         rightText.setText(text);
     }
+    public String getRightText() {
+        return rightText.getText().toString();
+    }
 
     public void setMiddleTextVisibility(boolean istVisibility) {
         if (istVisibility)

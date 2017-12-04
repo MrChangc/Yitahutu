@@ -10,17 +10,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.yitahutu.cn.MyApplication;
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.Utils.Event;
+import com.yitahutu.cn.Utils.PreferUtil;
 import com.yitahutu.cn.model.UserInfoModel;
 import com.yitahutu.cn.ui.activity.AssetActivity;
 import com.yitahutu.cn.ui.activity.FinancingActivity;
+import com.yitahutu.cn.ui.activity.MemberActivity;
+import com.yitahutu.cn.ui.activity.MessageActivity;
 import com.yitahutu.cn.ui.activity.RechargeActivity;
 import com.yitahutu.cn.ui.activity.SettingActivity;
 import com.yitahutu.cn.ui.activity.ShoppingActivity;
+import com.yitahutu.cn.ui.activity.UserLoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -73,9 +79,9 @@ public class UserInfoFragment extends Fragment {
 
     private void setData() {
         UserInfoModel userInfoModel = MyApplication.getUserInfoModel();
-        if (userInfoModel!=null){
+        if (userInfoModel != null) {
             textView.setText(userInfoModel.getName());
-            Picasso.with(getActivity()).load(userInfoModel.getUrl()).into(imageView);
+            Picasso.with(getActivity()).load(ConstantUtils.baseUrl+userInfoModel.getUrl()).into(imageView);
         }
 
     }
@@ -88,42 +94,83 @@ public class UserInfoFragment extends Fragment {
 
     @OnClick(R.id.ll_user_asset)
     public void setLlUserAsset() {
-        Intent intent = new Intent(getActivity(), AssetActivity.class);
-        getActivity().startActivity(intent);
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), AssetActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.ll_user_shopping)
     public void setLlShoppingAsset() {
-        Intent intent = new Intent(getActivity(), ShoppingActivity.class);
-        getActivity().startActivity(intent);
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), ShoppingActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.ll_user_financing)
     public void setLlUserFinancing() {
-        Intent intent = new Intent(getActivity(), FinancingActivity.class);
-        getActivity().startActivity(intent);
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), FinancingActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.ll_user_recharge)
     public void setLlUserRecharge() {
-        Intent intent = new Intent(getActivity(), RechargeActivity.class);
-        getActivity().startActivity(intent);
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), RechargeActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.ll_user_message)
     public void setLlUserMessage() {
-
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), MessageActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.ll_user_member)
     public void setLlUserMember() {
-
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), MemberActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.ll_user_setting)
     public void setLlUserSetting() {
-        Intent intent = new Intent(getActivity(), SettingActivity.class);
-        getActivity().startActivity(intent);
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), SettingActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.user_info_head_image)
+    public void setImageView() {
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), SettingActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Intent intent = new Intent(getActivity(), UserLoginActivity.class);
+            getActivity().startActivity(intent);
+        }
     }
 
     @Override
@@ -131,8 +178,9 @@ public class UserInfoFragment extends Fragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(Event.UserInfoEvent infoEvent){
+    public void refresh(Event.UserInfoEvent infoEvent) {
         setData();
     }
 }

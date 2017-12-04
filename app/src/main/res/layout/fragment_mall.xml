@@ -9,10 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/context_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#A3B0B9"
@@ -33,11 +35,15 @@
                         android:src="@mipmap/mall_screen" />
 
                     <EditText
+                        android:id="@+id/edit_search"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:background="@drawable/edittext_bg_shape" />
+                        android:background="@drawable/edittext_bg_shape"
+                        android:imeOptions="actionSearch"
+                        android:singleLine="true"
+                        android:textColor="@color/black" />
 
                     <ImageView
                         android:id="@+id/image_shop_car"
@@ -57,7 +63,7 @@
                 <com.bigkoo.convenientbanner.ConvenientBanner xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/convenientBanner"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="200dp"
                     app:canLoop="true" />
             </LinearLayout>
 
@@ -80,7 +86,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/style_bg_shape" />
+                        android:src="@mipmap/mall_type_milk_sour" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -102,7 +108,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/style_bg_shape" />
+                        android:src="@mipmap/mall_type_milk_pure" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -124,35 +130,35 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/style_bg_shape" />
+                        android:src="@mipmap/mall_type_milk_fruit" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="果奶"
+                        android:textColor="@color/title_back_ground"
+                        android:textSize="@dimen/text_size_large" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/mall_type_milk_other" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="其他"
-                        android:textColor="@color/title_back_ground"
-                        android:textSize="@dimen/text_size_large" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/style_bg_shape" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="奶粉系列"
                         android:textColor="@color/title_back_ground"
                         android:textSize="@dimen/text_size_large" />
                 </LinearLayout>
@@ -190,12 +196,11 @@
                 </LinearLayout>
 
                 <com.yitahutu.cn.ui.View.ListViewForScrollView
-                    android:divider="@color/color_background"
-                    android:dividerHeight="3dp"
                     android:id="@+id/list_goods"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </com.yitahutu.cn.ui.View.ListViewForScrollView>
+                    android:layout_height="match_parent"
+                    android:divider="@color/color_background"
+                    android:dividerHeight="3dp"></com.yitahutu.cn.ui.View.ListViewForScrollView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

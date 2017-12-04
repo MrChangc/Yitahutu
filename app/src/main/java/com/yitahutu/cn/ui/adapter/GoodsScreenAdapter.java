@@ -10,7 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.ui.activity.FinanceBalanceActivity;
 
@@ -61,7 +63,9 @@ public class GoodsScreenAdapter extends BaseAdapter {
             viewHolder.textSalesVolume.setText(goodsModel.getName());
         else
             viewHolder.textSalesVolume.setText("0");
+        Picasso.with(mContext).load(ConstantUtils.baseUrl+goodsModel.getCoverUrl()).into(viewHolder.goodsImage);
         viewHolder.textPrice.setText(goodsModel.getPresentPrice()+"");
+        viewHolder.textIntroduce.setText(goodsModel.getIntroduce());
         viewHolder.imageAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +89,8 @@ public class GoodsScreenAdapter extends BaseAdapter {
         TextView textSalesVolume;
         @BindView(R.id.text_price)
         TextView textPrice;
+        @BindView(R.id.text_introduce)
+        TextView textIntroduce;
         @BindView(R.id.image_add_cart)
         ImageView imageAddCart;
 

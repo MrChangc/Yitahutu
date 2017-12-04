@@ -12,8 +12,8 @@
         <CheckBox
             android:button="@null"
             android:id="@+id/check_cart_list"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/cart_list_checkbox_bg_selector"/>
         <ImageView
             android:id="@+id/image_goods"
@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/image_add"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@mipmap/mall_goods_add"/>
                 <TextView
                     android:id="@+id/text_count"
@@ -61,12 +61,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <ImageView
+                    android:id="@+id/image_minus"
                     android:layout_marginLeft="20dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@mipmap/mall_goods_minus"/>
                 <ImageView
-                    android:id="@+id/image_minus"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

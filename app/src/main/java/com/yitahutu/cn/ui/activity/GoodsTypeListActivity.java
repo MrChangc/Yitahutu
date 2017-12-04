@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,8 +19,8 @@ import android.widget.TextView;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.GoodsModel;
+import com.yitahutu.cn.ui.View.RefreshableView;
 import com.yitahutu.cn.ui.adapter.GoodsScreenAdapter;
-import com.yitahutu.cn.ui.adapter.GoodsTypeAdapter;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +37,7 @@ import butterknife.OnClick;
 /**
  * Created by Administrator on 2017\10\31 0031.
  */
-public class GoodsTypeListActivity extends Activity {
+public class GoodsTypeListActivity extends Activity implements AdapterView.OnItemClickListener {
     @BindView(R.id.text_comprehensive)
     TextView textComprehensive;
     @BindView(R.id.ll_comprehensive)
@@ -65,27 +67,54 @@ public class GoodsTypeListActivity extends Activity {
     LinearLayout buttonConfirm;
     TextView positiveSequence;
     TextView flashback;
-    private int id;
+    @BindView(R.id.edit_search)
+    EditText editSearch;
+    @BindView(R.id.refresh_view)
+    RefreshableView refreshView;
     private PopupWindow pricePopupWindow;
     private PopupWindow popupWindow;
     private List<GoodsModel> goodsModels = new ArrayList<>();
     private GoodsScreenAdapter screenAdapter;
+
+    private int id;
+    private String max = "", mix = "", screenType = "", sortType = "", recommendId = "", typeId = "",search = "";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         id = getIntent().getIntExtra("id", -1);
+        typeId = id + "";
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_type_goods_list);
         ButterKnife.bind(this);
+        refreshView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
+            @Override
+            public void onRefresh() {
+                search = editSearch.getText().toString();
+                WebService.getGoodsListBySerch(GoodsTypeListActivity.this,
+                        search, recommendId + "", screenType, typeId + "", sortType, max, mix,refreshView);
+            }
+        },getTaskId());
         initPopWindow();
         comprehensive();
+        typeList.setOnItemClickListener(this);
         initList();
+        editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                WebService.getGoodsListBySerch(GoodsTypeListActivity.this,
+                        textView.getText().toString(), recommendId + "", screenType, typeId + "",
+                        sortType, max, mix,refreshView);
+                return true;
+            }
+        });
     }
 
     private void initList() {
         List<GoodsModel> models = GoodsModel.listAll(GoodsModel.class);
         goodsModels.addAll(models);
-        screenAdapter = new GoodsScreenAdapter(this,goodsModels);
+        screenAdapter = new GoodsScreenAdapter(this, goodsModels);
+        typeList.setAdapter(screenAdapter);
     }
 
     private void initPopWindow() {
@@ -101,25 +130,30 @@ public class GoodsTypeListActivity extends Activity {
         });
         pricePopupWindow = new PopupWindow(view_price, LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
+        pricePopupWindow.setFocusable(true);
         pricePopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        pricePopupWindow.setOutsideTouchable(true);
         View view = View.inflate(this, R.layout.popmenu_short, null);
         positiveSequence = (TextView) view.findViewById(R.id.positive_sequence);
         flashback = (TextView) view.findViewById(R.id.flashback);
         positiveSequence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WebService.getGoodsListByScreenType(GoodsTypeListActivity.this,3,id,1);
+                sortType = 1 + "";
+                WebService.getGoodsListByScreenType(GoodsTypeListActivity.this, 3, id, 1);
             }
         });
         flashback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WebService.getGoodsListByScreenType(GoodsTypeListActivity.this,3,id,2);
+                sortType = 2 + "";
+                WebService.getGoodsListByScreenType(GoodsTypeListActivity.this, 3, id, 2);
             }
         });
         popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setOutsideTouchable(true);
     }
 
     @OnClick({R.id.ll_comprehensive, R.id.ll_sales_volume,
@@ -152,10 +186,10 @@ public class GoodsTypeListActivity extends Activity {
     }
 
     private void priceRange() {
-        String max = editMaxPrice.getText().toString().trim();
-        String mix = editMinPrice.getText().toString().trim();
-        if (max!=null&&!TextUtils.isEmpty(max)&&mix!=null&&!TextUtils.isEmpty(mix)){
-            WebService.getGoodsListByPriceRange(this,id,max,mix);
+        max = editMaxPrice.getText().toString().trim();
+        mix = editMinPrice.getText().toString().trim();
+        if (max != null && !TextUtils.isEmpty(max) && mix != null && !TextUtils.isEmpty(mix)) {
+            WebService.getGoodsListByPriceRange(this, id, max, mix);
         }
     }
 
@@ -177,6 +211,7 @@ public class GoodsTypeListActivity extends Activity {
     }
 
     private void salesVolume() {
+        screenType = 2 + "";
         WebService.getGoodsListByScreenType(this, 2, id);
         textPrice.setTextColor(getResources().getColor(R.color.black));
         textComprehensive.setTextColor(getResources().getColor(R.color.black));
@@ -185,6 +220,7 @@ public class GoodsTypeListActivity extends Activity {
     }
 
     private void comprehensive() {
+        screenType = 1 + "";
         WebService.getGoodsListByScreenType(this, 1, id);
         textPrice.setTextColor(getResources().getColor(R.color.black));
         textComprehensive.setTextColor(getResources().getColor(R.color.title_back_ground));
@@ -201,8 +237,16 @@ public class GoodsTypeListActivity extends Activity {
         Intent intent = new Intent(this, RecommendListActivity.class);
         startActivity(intent);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(Event.GoodsByScreenEvent goodsByScreenEvent){
+    public void refresh(Event.GoodsByScreenEvent goodsByScreenEvent) {
+        goodsModels.clear();
+        goodsModels.addAll(goodsByScreenEvent.goodsModels);
+        screenAdapter.notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(Event.GoodsBySearch goodsByScreenEvent) {
         goodsModels.clear();
         goodsModels.addAll(goodsByScreenEvent.goodsModels);
         screenAdapter.notifyDataSetChanged();
@@ -212,5 +256,15 @@ public class GoodsTypeListActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        GoodsModel goodsModel = goodsModels.get(i);
+        if (goodsModel != null) {
+            Intent intent = new Intent(this, GoodsDetailActivity.class);
+            intent.putExtra("goods_id", goodsModel.getId());
+            startActivity(intent);
+        }
     }
 }

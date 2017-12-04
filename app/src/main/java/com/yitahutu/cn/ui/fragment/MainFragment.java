@@ -4,14 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.PreferUtil;
+import com.yitahutu.cn.ui.activity.FinancingPastureActivity;
+import com.yitahutu.cn.ui.activity.MainActivity;
 import com.yitahutu.cn.ui.activity.MemberActivity;
+import com.yitahutu.cn.ui.activity.RechargeActivity;
 import com.yitahutu.cn.ui.activity.RegisterActivity;
 import com.yitahutu.cn.ui.activity.UserLoginActivity;
 
@@ -63,19 +69,55 @@ public class MainFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
     @OnClick(R.id.button_login)
-    public void setButtonLogin(){
-        Intent intent= new Intent(getActivity(), UserLoginActivity.class);
+    public void setButtonLogin() {
+        Intent intent = new Intent(getActivity(), UserLoginActivity.class);
         getActivity().startActivity(intent);
     }
+
     @OnClick(R.id.button_register)
-    public void setButtonRegister(){
-        Intent intent= new Intent(getActivity(), RegisterActivity.class);
+    public void setButtonRegister() {
+        Intent intent = new Intent(getActivity(), RegisterActivity.class);
         getActivity().startActivity(intent);
     }
+
     @OnClick(R.id.button_member)
-    public void setButtonMember(){
-        Intent intent= new Intent(getActivity(), MemberActivity.class);
+    public void setButtonMember() {
+        Intent intent = new Intent(getActivity(), MemberActivity.class);
         getActivity().startActivity(intent);
     }
+
+    @OnClick({R.id.ll_shift_to, R.id.button_subscription, R.id.ll_ramble, R.id.button_shop, R.id.ll_direct, R.id.button_direct})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ll_shift_to:
+                gotoActivity(RechargeActivity.class);
+                break;
+            case R.id.button_subscription:
+                gotoActivity(FinancingPastureActivity.class);
+                break;
+            case R.id.ll_ramble:
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("isBalance",true);
+                getActivity().startActivity(intent);
+                break;
+            case R.id.button_shop:
+                gotoActivity(MemberActivity.class);
+                break;
+            case R.id.ll_direct:
+                break;
+            case R.id.button_direct:
+                Log.e("button_direct","ok");
+                break;
+        }
+    }
+    private void gotoActivity(Class aClass){
+        if (PreferUtil.isLogin()) {
+            Intent intent = new Intent(getActivity(), aClass);
+            getActivity().startActivity(intent);
+        }else
+            Toast.makeText(getActivity(),"请先登录!",Toast.LENGTH_SHORT);
+    }
+
 }

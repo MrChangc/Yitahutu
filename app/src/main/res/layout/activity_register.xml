@@ -2,27 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background"
+    android:background="@mipmap/login_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <ImageView
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/login_logo" />
 
     <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/red_point" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,51 +34,72 @@
         <EditText
             android:textColor="@color/black"
             android:id="@+id/edit_phone_number"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/edittext_bg_shape" />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:gravity="center"
         android:orientation="horizontal">
-
-        <ImageView
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/red_point" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="设置密码："
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_large" />
 
-        <EditText
-            android:textColor="@color/black"
-            android:id="@+id/setting_password"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="设置密码："
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large" />
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_marginLeft="10dp"
-            android:background="@drawable/edittext_bg_shape" />
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:password="true"
+                android:textColor="@color/black"
+                android:id="@+id/setting_password"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+
+                android:background="@drawable/edittext_bg_shape" />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:text="密码由6-18位数字字母组成"
+                android:textSize="@dimen/text_size_middle"
+                android:textColor="@color/gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
     </LinearLayout>
+
     <LinearLayout
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/red_point" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,25 +110,24 @@
             android:textSize="@dimen/text_size_large" />
 
         <EditText
+            android:password="true"
             android:textColor="@color/black"
             android:id="@+id/true_password"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/edittext_bg_shape" />
     </LinearLayout>
     <LinearLayout
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_marginLeft="50dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/red_point" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -119,26 +138,52 @@
             android:textSize="@dimen/text_size_large" />
 
         <EditText
+            android:layout_weight="1"
             android:textColor="@color/black"
             android:id="@+id/identifying_code"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_marginLeft="25dp"
             android:background="@drawable/edittext_bg_shape" />
         <TextView
+            android:padding="5dp"
+            android:layout_marginRight="10dp"
             android:layout_marginLeft="5dp"
             android:id="@+id/send_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="发送验证码"
-            android:textColor="@color/black"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_middle" />
+    </LinearLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <CheckBox
+            android:id="@+id/checkbox"
+            style="@style/style_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/text_agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="养牛啦用户注册协议"
+            android:textColor="#7489B2"
             android:textSize="@dimen/text_size_middle" />
     </LinearLayout>
 
+
     <Button
-        android:layout_width="120dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:background="@drawable/green_button_bg_shape"
         android:gravity="center"
         android:onClick="agree"
@@ -180,16 +225,10 @@
             android:textSize="@dimen/text_size_large" />
     </LinearLayout>
 
-    <TextView
-        android:layout_marginTop="20dp"
-        android:id="@+id/text_agree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="养牛啦用户注册协议"
-        android:textColor="#7489B2"
-        android:textSize="@dimen/text_size_middle" />
+
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -199,7 +238,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/login_cow" />
         <LinearLayout
             android:layout_marginLeft="40dp"
             android:orientation="vertical"

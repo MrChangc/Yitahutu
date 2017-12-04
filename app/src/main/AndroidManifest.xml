@@ -3,13 +3,15 @@
     package="com.yitahutu.cn">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/app_name"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".MyApplication">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="DATABASE"
             android:value="yitahutu.db" />
@@ -23,12 +25,10 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.yitahutu.cn.model" />
 
-        <activity android:name=".ui.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.activity.AssetActivity" />
         <activity android:name=".ui.activity.FinancingActivity" />
@@ -43,15 +43,37 @@
         <activity android:name=".ui.activity.FinancingPastureActivity" />
         <activity android:name=".ui.activity.RecommendListActivity" />
         <activity android:name=".ui.activity.GoodsDetailActivity" />
-        <activity android:name=".ui.activity.AppStartActivity"/>
-        <activity android:name=".ui.activity.FinanceDetailActivity"/>
-        <activity android:name=".ui.activity.CartListActivity"/>
-        <activity android:name=".ui.activity.MallDetailBaseActivity"/>
-        <activity android:name=".ui.activity.AddressListActivity"/>
-        <activity android:name=".ui.activity.AddressDetailActivity"/>
-        <activity android:name=".ui.activity.FinanceBalanceActivity"/>
-        <activity android:name=".ui.activity.GoodsTypeListActivity"/>
-        <activity android:name=".ui.activity.BuySuccessActivity"/>
+        <activity android:name=".ui.activity.FinanceDetailActivity" />
+        <activity android:name=".ui.activity.CartListActivity" />
+        <activity android:name=".ui.activity.MallDetailBaseActivity" />
+        <activity android:name=".ui.activity.AddressListActivity" />
+        <activity android:name=".ui.activity.AddressDetailActivity" />
+        <activity android:name=".ui.activity.FinanceBalanceActivity" />
+        <activity android:name=".ui.activity.GoodsTypeListActivity" />
+        <activity android:name=".ui.activity.BuySuccessActivity" />
+        <activity android:name=".ui.activity.ConsumeDetailActivity" />
+        <activity android:name=".ui.activity.ConsumeListActivity" />
+        <activity android:name=".ui.activity.RefundActivity" />
+        <activity android:name=".ui.activity.MallBalanceActivity" />
+        <activity android:name=".ui.activity.MessageActivity" />
+        <activity android:name=".ui.activity.FinanceDetailListActivity" />
+        <activity android:name=".ui.activity.PrivacyContextActivity" />
+        <activity android:name=".ui.activity.ExpressListActivity" />
+        <activity android:name=".ui.activity.AppStartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".receiver.NetworkChangedReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

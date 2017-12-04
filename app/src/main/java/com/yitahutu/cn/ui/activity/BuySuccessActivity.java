@@ -23,8 +23,8 @@ public class BuySuccessActivity extends BaseActivity {
         setContentView("购买成功", R.layout.activity_buy_success);
     }
     public void look(View view){
-        Intent intent = new Intent(mContext,MallDetailBaseFragment.class);
-        intent.putExtra("page",3);
+        Intent intent = new Intent(mContext,MallDetailBaseActivity.class);
+        intent.putExtra("page",2);
         startActivity(intent);
     }
 

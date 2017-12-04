@@ -17,8 +17,8 @@ import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.AddressModel;
+import com.yitahutu.cn.model.FinanceDetailModel;
 import com.yitahutu.cn.model.FinanceModel;
-import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.ui.View.PaymentDialog;
 import com.yitahutu.cn.webservice.WebService;
 
@@ -50,12 +50,12 @@ public class FinanceBalanceActivity extends BaseActivity {
     TextView textGoodsName;
     @BindView(R.id.text_goods_price)
     TextView textGoodsPrice;
-    @BindView(R.id.image_add)
-    ImageView imageAdd;
+//    @BindView(R.id.image_add)
+//    ImageView imageAdd;
     @BindView(R.id.text_count)
     TextView textCount;
-    @BindView(R.id.image_minus)
-    ImageView imageMinus;
+//    @BindView(R.id.image_minus)
+//    ImageView imageMinus;
     @BindView(R.id.cart_list_delete)
     ImageView cartListDelete;
     @BindView(R.id.text_integration)
@@ -66,9 +66,16 @@ public class FinanceBalanceActivity extends BaseActivity {
     TextView textTotal;
     @BindView(R.id.payment)
     LinearLayout payment;
+    @BindView(R.id.ll_info)
+    LinearLayout llInfo;
+    @BindView(R.id.text_add_new)
+    TextView textAddNew;
     private long id = -1;
-    private String goodsId = "-1";
-    private String addressId = "-1"  ;
+    private String goodsId = null;
+    private String addressId = "-1";
+    private int number;
+    private int price;
+    private String  financeId;
     @Override
     void setRightIconListener() {
 
@@ -80,18 +87,46 @@ public class FinanceBalanceActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         setContentView("购买商品", R.layout.activity_finance_balance);
         ButterKnife.bind(this);
+        number = getIntent().getIntExtra("number",1);
         setData();
+        textCount.setText(number+"");
     }
 
     private void setData() {
         Bundle bundle = getIntent().getExtras();
-        FinanceModel financeModel = (FinanceModel) bundle.getSerializable("finance");
-        if (financeModel!=null){
+        Object object = bundle.getSerializable("finance");
+        if (object instanceof FinanceModel) {
+            FinanceModel financeModel = (FinanceModel) object;
             textGoodsName.setText(financeModel.getHeadline());
             textGoodsPrice.setText("￥ " + financeModel.getPrice());
             textCount.setText("1");
-            goodsId = financeModel.getId()+"";
-            Picasso.with(mContext).load(ConstantUtils.baseUrl+"/resource/raceType/49491997.jpg").into(imageGoods);
+            goodsId = financeModel.getId() + "";
+            String allUrl = financeModel.getUrl();
+            if (allUrl.contains(";")){
+                String[] strings = allUrl.split(";");
+                Picasso.with(mContext).load(ConstantUtils.baseUrl + strings[0]).into(imageGoods);
+            }else {
+                Picasso.with(mContext).load(ConstantUtils.baseUrl + allUrl).into(imageGoods);
+            }
+            price = financeModel.getPrice();
+            textTotal.setText(price+"");
+            financeId = financeModel.getId()+"";
+        }else if (object instanceof FinanceDetailModel){
+            FinanceDetailModel financeModel = (FinanceDetailModel) object;
+            textGoodsName.setText(financeModel.getHeadline());
+            textGoodsPrice.setText("￥ " + financeModel.getPrice());
+            textCount.setText("1");
+            goodsId = financeModel.getId() + "";
+            String allUrl = financeModel.getUrl();
+            if (allUrl.contains(";")){
+                String[] strings = allUrl.split(";");
+                Picasso.with(mContext).load(ConstantUtils.baseUrl + strings[0]).into(imageGoods);
+            }else {
+                Picasso.with(mContext).load(ConstantUtils.baseUrl + allUrl).into(imageGoods);
+            }
+            price = financeModel.getPrice();
+            textTotal.setText(price+"");
+            financeId = financeModel.getId()+"";
         }
     }
 
@@ -104,40 +139,58 @@ public class FinanceBalanceActivity extends BaseActivity {
                 textUserName.setText(addressModel.getName());
                 textPhoneNumber.setText(addressModel.getPhone());
                 isCheck = true;
-                addressId = addressModel.getId()+"";
+                addressId = addressModel.getId() + "";
                 return;
             }
         }
-        if (!isCheck){
-            AddressModel addressModel = models.get(0);
-            textAddress.setText(addressModel.getDetailAddress());
-            textUserName.setText(addressModel.getName());
-            textPhoneNumber.setText(addressModel.getPhone());
-            addressId = addressModel.getId()+"";
+        if (!isCheck) {
+            if (models.size() > 0) {
+                llInfo.setVisibility(View.VISIBLE);
+                textAddNew.setVisibility(View.GONE);
+                AddressModel addressModel = models.get(0);
+                textAddress.setText(addressModel.getDetailAddress());
+                textUserName.setText(addressModel.getName());
+                textPhoneNumber.setText(addressModel.getPhone());
+                addressId = addressModel.getId() + "";
+            }else {
+                llInfo.setVisibility(View.GONE);
+                textAddNew.setVisibility(View.VISIBLE);
+            }
         }
 
     }
 
 
-    @OnClick({R.id.ll_address_info, R.id.image_add, R.id.image_minus, R.id.payment})
+    @OnClick({R.id.ll_address_info, R.id.image_add, R.id.image_minus, R.id.payment, R.id.cart_list_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_address_info:
                 gotoAddressListActivity();
                 break;
             case R.id.image_add:
-                int addCount = Integer.valueOf(textCount.getText().toString());
-                textCount.setText((addCount + 1) + "");
+                number = number+1;
+                textCount.setText((number) + "");
+                textTotal.setText(number*price+"");
                 break;
             case R.id.image_minus:
                 int count = Integer.valueOf(textCount.getText().toString());
                 if (count <= 1)
                     Toast.makeText(mContext, "个数不能为零", Toast.LENGTH_SHORT).show();
-                else
-                    textCount.setText((count - 1) + "");
+                else{
+                    number = number-1;
+                    textCount.setText((number) + "");
+                    textTotal.setText(number*price+"");
+                }
                 break;
             case R.id.payment:
+                if (addressId.equals("-1") ){
+                    Toast.makeText(mContext,"请选择收货地址!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 showPaymentDialog();
+                break;
+            case R.id.cart_list_delete:
+                finish();
                 break;
         }
     }
@@ -161,14 +214,14 @@ public class FinanceBalanceActivity extends BaseActivity {
         PaymentDialog paymentDialog = new PaymentDialog(mContext, new PaymentDialog.BalanceOnClick() {
             @Override
             public void onBalance() {
-                WebService.buyGoods(addressId,goodsId,textCount.getText().toString(),"3",mContext);
+                WebService.financeAdopt( "3", financeId,number+"",mContext);
             }
         });
         paymentDialog.create();
         if (MyApplication.getUserInfoModel() != null) {
             paymentDialog.setTextNumber(MyApplication.getUserInfoModel().getName());
         }
-        paymentDialog.setTextCount(Integer.valueOf(textCount.getText().toString()) + "");
+        paymentDialog.setTextCount(price*number + "");
         paymentDialog.setTextType("牛币");
         paymentDialog.show();
 //        }else
@@ -186,15 +239,16 @@ public class FinanceBalanceActivity extends BaseActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void gotoBuySuccessActivity(Event.BuyGoodsEvent buyGoodsEvent){
-        if (goodsId!="-1"){
-            Intent intent = new Intent(mContext,BuySuccessActivity.class);
-            intent.putExtra("id",goodsId);
+    public void gotoBuySuccessActivity(Event.BuyGoodsEvent buyGoodsEvent) {
+        if (goodsId != "-1") {
+            Intent intent = new Intent(mContext, BuySuccessActivity.class);
+            intent.putExtra("id", goodsId);
             startActivity(intent);
-        }else if (addressId!="-1"){
-            Intent intent = new Intent(mContext,BuySuccessActivity.class);
-            intent.putExtra("id",goodsId);
+        } else if (addressId != "-1") {
+            Intent intent = new Intent(mContext, BuySuccessActivity.class);
+            intent.putExtra("id", goodsId);
         }
     }
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.model.RecommendModel;
+import com.yitahutu.cn.webservice.WebService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,23 +56,26 @@ public class GoodsTypeAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         radioButtons.add(viewHolder.textTypeName);
-        RecommendModel recommendModel = recommendModels.get(i);
+        final RecommendModel recommendModel = recommendModels.get(i);
         viewHolder.textTypeName.setText(recommendModel.getName());
         if (i==0)
             viewHolder.textTypeName.setChecked(true);
-        final ViewHolder finalViewHolder = viewHolder;
+        viewHolder.textTypeName.setChecked(recommendModel.isCheck());
         viewHolder.textTypeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (finalViewHolder.textTypeName.isChecked()){
+                if (recommendModel.isCheck()){
                     return;
+                }else {
+                    recommendModel.setCheck(true);
+                    for (int j = 0 ; j < recommendModels.size() ; j++){
+                        if (j !=i )
+                            recommendModels.get(j).setCheck(false);
+                    }
+                    notifyDataSetChanged();
+                    WebService.getGoodsListByRecommend(mContext,recommendModel.getId());
                 }
-                if (position != -1){
-                    RadioButton radioButton = radioButtons.get(position);
-                    radioButton.setChecked(false);
-                }
-                position = i;
-                finalViewHolder.textTypeName.setChecked(true);
+
             }
         });
         return view;
@@ -91,4 +95,5 @@ public class GoodsTypeAdapter extends BaseAdapter {
         super.notifyDataSetChanged();
         radioButtons.clear();
     }
+
 }

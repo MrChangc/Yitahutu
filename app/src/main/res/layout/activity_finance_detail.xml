@@ -2,365 +2,391 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-   <com.bigkoo.convenientbanner.ConvenientBanner
-       android:layout_width="match_parent"
-       android:layout_height="180dp"/>
-    <LinearLayout
-        android:background="@color/white"
-        android:orientation="vertical"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
+            android:id="@+id/ll_financing_info"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/text_stage"
-                android:textSize="@dimen/text_size_xlarge"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/color_background"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"/>
-        <LinearLayout
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <LinearLayout
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_weight="1"
+            android:layout_height="match_parent">
+            <com.bigkoo.convenientbanner.ConvenientBanner
+                android:id="@+id/convenientBanner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="180dp"/>
+            <LinearLayout
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <LinearLayout
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/text_stage"
+                        android:textSize="@dimen/text_size_xlarge"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <View
+                    android:background="@color/color_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"/>
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_marginLeft="20dp"
+                            android:gravity="left"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:text="领养价格:"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/text_adopt_price"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="领养价格"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:text="分红方式:"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/text_take_red_type"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="领养价格"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:text="领养周期:"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/text_adopt_cycle"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="领养价格"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:text="分红利率:"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/text_adopt_rate"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="分红利率"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_large"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <View
+                            android:background="@color/color_background"
+                            android:layout_width="2dp"
+                            android:layout_height="100dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_marginLeft="20dp"
+                        android:gravity="left"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="认领价格:"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/text_adopt_price_2"
+                                android:layout_marginLeft="10dp"
+                                android:text="介筛解释"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout
+
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="领养时长:"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/text_adopt_date"
+                                android:layout_marginLeft="10dp"
+                                android:text="领养价格"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="分红金额:"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/text_take_red_price"
+                                android:layout_marginLeft="10dp"
+                                android:text="100"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="到期分红:"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:text="50"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <View
+                    android:background="@color/color_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"/>
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_marginLeft="20dp"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="领养数量"
+                            android:textSize="@dimen/text_size_xlarge"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:gravity="right|center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/image_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/mall_goods_add"/>
+                        <TextView
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_large"
+                            android:text="10"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/text_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:id="@+id/image_minus"
+                            android:layout_marginRight="50dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/mall_goods_minus"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <View
+                    android:layout_marginTop="10dp"
+                    android:background="@color/color_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"/>
+                <LinearLayout
+                    android:id="@+id/ll_total"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_xlarge"
+                        android:text="总价 ："
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/text_total"
+                        android:textColor="@color/title_back_ground"
+                        android:textSize="@dimen/text_size_xlarge"
+                        android:text="总价 ："
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <View
+                    android:background="@color/color_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"/>
+                <LinearLayout
+
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:gravity="left"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
+                        android:layout_marginTop="10dp"
                         android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
+                        <CheckBox
+                            style="@style/style_checkbox"
+                            android:id="@+id/checkbox_agree"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
                         <TextView
-                            android:text="领养价格:"
+                            android:text="同意"
+                            android:textSize="@dimen/text_size_xlarge"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
+                            android:layout_marginLeft="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <TextView
-                            android:id="@+id/text_adopt_price"
-                            android:layout_marginLeft="10dp"
-                            android:text="领养价格"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
+                            android:id="@+id/cowboy_protocol"
+                            android:text="《同意养牛协议》"
+                            android:textSize="@dimen/text_size_xlarge"
+                            android:textColor="@color/title_back_ground"
+                            android:layout_marginLeft="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:id="@+id/ll_balance"
+                        android:background="#86C58E"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:layout_width="wrap_content"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
                         <TextView
-                            android:text="分红方式:"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/text_take_red_type"
-                            android:layout_marginLeft="10dp"
-                            android:text="领养价格"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:text="领养周期:"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/text_adopt_cycle"
-                            android:layout_marginLeft="10dp"
-                            android:text="领养价格"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:text="分红利率:"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/text_adopt_rate"
-                            android:layout_marginLeft="10dp"
-                            android:text="分红利率"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/text_size_large"
+                            android:text="理财结算"
+                            android:textSize="@dimen/text_size_xlarge"
+                            android:textColor="@color/black_real"
+                            android:layout_marginLeft="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
-                <View
-                    android:background="@color/color_background"
-                    android:layout_width="2dp"
-                    android:layout_height="100dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginLeft="20dp"
-                android:gravity="left"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="认领价格:"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/text_adopt_price_2"
-                        android:layout_marginLeft="10dp"
-                        android:text="介筛解释"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="领养时长:"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/text_adopt_date"
-                        android:layout_marginLeft="10dp"
-                        android:text="领养价格"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="分红金额:"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/text_take_red_price"
-                        android:layout_marginLeft="10dp"
-                        android:text="100"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="到期分红:"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:text="50"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-        <View
-            android:background="@color/color_background"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"/>
-        <LinearLayout
-            android:gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_marginLeft="20dp"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="领养数量"
-                    android:textSize="@dimen/text_size_xlarge"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:gravity="right|center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/image_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/mall_goods_add"/>
-                <TextView
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_large"
-                    android:text="10"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/text_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <ImageView
-                    android:id="@+id/image_minus"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/mall_goods_minus"/>
-            </LinearLayout>
-
-        </LinearLayout>
-        <View
-            android:layout_marginTop="10dp"
-            android:background="@color/color_background"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"/>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:padding="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_xlarge"
-                android:text="总价 ："
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/text_total"
-                android:textColor="@color/title_back_ground"
-                android:textSize="@dimen/text_size_xlarge"
-                android:text="总价 ："
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/color_background"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"/>
-        <LinearLayout
-            android:layout_marginLeft="20dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <CheckBox
-                    android:id="@+id/checkbox_agree"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:text="同意"
-                    android:textSize="@dimen/text_size_xlarge"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/cowboy_protocol"
-                    android:text="《同意养牛协议》"
-                    android:textSize="@dimen/text_size_xlarge"
-                    android:textColor="@color/title_back_ground"
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/ll_balance"
-                android:background="#86C58E"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="理财结算"
-                    android:textSize="@dimen/text_size_xlarge"
-                    android:textColor="@color/black_real"
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/text_no_data"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_xlarge"
+            android:text="亲，断网啦!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
 
 </LinearLayout>

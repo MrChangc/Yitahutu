@@ -2,6 +2,7 @@ package com.yitahutu.cn.webservice;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -12,13 +13,20 @@ import com.yitahutu.cn.Utils.GsonUtils;
 import com.yitahutu.cn.Utils.PreferUtil;
 import com.yitahutu.cn.model.AddressModel;
 import com.yitahutu.cn.model.CartListModel;
+import com.yitahutu.cn.model.ConsumeModel;
 import com.yitahutu.cn.model.EvaluateAll;
 import com.yitahutu.cn.model.EvaluateModel;
+import com.yitahutu.cn.model.ExpressModel;
+import com.yitahutu.cn.model.FinanceDetailModel;
 import com.yitahutu.cn.model.FinanceModel;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.model.RecommendModel;
+import com.yitahutu.cn.model.RefundRecordModel;
+import com.yitahutu.cn.model.TotalModel;
 import com.yitahutu.cn.model.UserInfoModel;
 import com.yitahutu.cn.ui.View.QdLoadingDialog;
+import com.yitahutu.cn.ui.View.RefreshableView;
+import com.yitahutu.cn.ui.activity.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
@@ -75,7 +83,8 @@ public class WebService {
                     }
                 });
     }
-    public static void register(final Context mContext, String phoneNumber, String authCode,String type,String password,String surePass) {
+
+    public static void register(final Context mContext, String phoneNumber, String authCode, String type, String password, String surePass) {
         OkHttpUtils
                 .post()
                 .url(ConstantUtils.baseUrl + "/user/register")
@@ -108,6 +117,11 @@ public class WebService {
                                 message = "验证码不正确";
                             else if (code == 5)
                                 message = "两次输入密码不一致";
+                            else if (code == 200) {
+                                message = "注册成功!";
+                                Intent intent = new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(intent);
+                            }
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
@@ -126,6 +140,7 @@ public class WebService {
                 .build()
                 .execute(objectCallBack);
     }
+
     public static void getUserInfoModel(String token, JsonObjectCallBack objectCallBack) {
         OkHttpUtils
                 .post()
@@ -135,7 +150,7 @@ public class WebService {
                 .execute(objectCallBack);
     }
 
-    public static void getUserInfo( final Context mContext) {
+    public static void getUserInfo(final Context mContext) {
         String token = null;
 //        if (PreferUtil.isLogin())
 //            token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -179,9 +194,9 @@ public class WebService {
 
     public static void getGoodsList(final Context mContext) {
         String token = null;
-//        if (PreferUtil.isLogin())
-//            token = PreferUtil.getToken(PreferUtil.getUserName());
-//        else
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
             token = ConstantUtils.default_token;
         OkHttpUtils
                 .post()
@@ -190,6 +205,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -267,7 +283,71 @@ public class WebService {
                     }
                 });
     }
-    public static void getGoodsListByScreenType(final Context mContext, int id ,int type) {
+
+    public static void getGoodsListBySerch(final Context mContext,
+                                           String name,
+                                           String recommendId,
+                                           String screenType,
+                                           String typeId,
+                                           String sortType,
+                                           String max,
+                                           String mix,
+                                           final RefreshableView refreshableView) {
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/goods/list")
+                .addParams("token", token)
+                .addParams("name", name)
+                .addParams("recommendId", recommendId)
+                .addParams("screenType", screenType)
+                .addParams("sortType", sortType)
+                .addParams("typeId", typeId)
+                .addParams("maxPrice", max)
+                .addParams("minPrice", mix)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        if (refreshableView != null)
+                            refreshableView.finishRefreshing();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1)
+                                message = "参数为空";
+                            else if (code == 300)
+                                message = "登录过期";
+                            else if (code == 200) {
+                                message = "获取商品成功";
+                                String data = response.getString("datas");
+                                List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
+                                if (goodsModels.size() > 0)
+                                    EventBus.getDefault().post(new Event.GoodsBySearch(goodsModels));
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        if (refreshableView != null)
+                            refreshableView.finishRefreshing();
+                    }
+                });
+    }
+
+    public static void getGoodsListByScreenType(final Context mContext, int id, int type) {
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -312,7 +392,8 @@ public class WebService {
                     }
                 });
     }
-    public static void getGoodsListByScreenType(final Context mContext, int id ,int type,int sortType) {
+
+    public static void getGoodsListByScreenType(final Context mContext, int id, int type, int sortType) {
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -324,6 +405,7 @@ public class WebService {
                 .addParams("token", token)
                 .addParams("screenType", id + "")
                 .addParams("typeId", type + "")
+                .addParams("sortType", sortType + "")
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
@@ -357,7 +439,8 @@ public class WebService {
                     }
                 });
     }
-    public static void getGoodsListByPriceRange(final Context mContext, int type,String max,String mix) {
+
+    public static void getGoodsListByPriceRange(final Context mContext, int type, String max, String mix) {
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -405,8 +488,8 @@ public class WebService {
     }
 
 
-
-    public static void getEvaluateList(final Context mContext, String id) {
+    public static void getEvaluateList(final Context mContext, String id, final RefreshableView refreshableView) {
+        loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -425,7 +508,8 @@ public class WebService {
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-
+                        mLoadingDialog.dismiss();
+                        refreshableView.finishRefreshing();
                     }
 
                     @Override
@@ -452,6 +536,63 @@ public class WebService {
                             e.printStackTrace();
                         }
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                        refreshableView.finishRefreshing();
+                    }
+                });
+    }
+
+    public static void getEvaluateList(final Context mContext, String id, String grade, final RefreshableView refreshableView) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/evaluation/list")
+                .addParams("token", token)
+                .addParams("goodsId", id)
+                .addParams("grade", grade)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                        refreshableView.finishRefreshing();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1)
+                                message = "参数为空";
+                            else if (code == 300)
+                                message = "登录过期";
+                            else if (code == 200) {
+                                message = "获取评论成功";
+                                String data = response.getString("datas");
+                                EvaluateAll evaluateAll = GsonUtils.parserJsonObjectToEvaluateAll(data);
+                                evaluateAll.save();
+                                List<EvaluateModel> evaluateModels = evaluateAll.getEvaluationVo();
+                                EvaluateModel.deleteAll(EvaluateModel.class);
+                                EvaluateModel.saveInTx(evaluateModels);
+                                if (evaluateModels.size() > 0)
+                                    EventBus.getDefault().post(new Event.EvaluateEvent(evaluateModels));
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                        refreshableView.finishRefreshing();
                     }
                 });
     }
@@ -491,11 +632,11 @@ public class WebService {
                                 for (GoodsModel goodsModel : goodsModels) {
                                     if (goodsModel != null) {
                                         if (goodsModel.getCoverUrl() != null && !TextUtils.isEmpty(goodsModel.getCoverUrl()))
-                                            images.add(ConstantUtils.baseUrl+goodsModel.getCoverUrl());
+                                            images.add(ConstantUtils.baseUrl + goodsModel.getCoverUrl());
                                     }
                                 }
                                 if (goodsModels.size() > 0)
-                                    EventBus.getDefault().post(new Event.RecommendGoodsEvent());
+                                    EventBus.getDefault().post(new Event.RecommendGoodsEvent(goodsModels));
                             }
                         } catch (JSONException e) {
                             message = "请求错误";
@@ -539,7 +680,7 @@ public class WebService {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     PreferUtil.setRecommendModelList(data);
-                                    EventBus.getDefault().post(new Event.RecommendGoodsEvent());
+                                    EventBus.getDefault().post(new Event.RecommendListEvent());
                                 }
                             }
                         } catch (JSONException e) {
@@ -596,7 +737,7 @@ public class WebService {
                 });
     }
 
-    public static void getFinanceList(final Context mContext) {
+    public static void getFinanceList(final Context mContext, final RefreshableView refreshableView) {
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -614,6 +755,7 @@ public class WebService {
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        refreshableView.finishRefreshing();
                     }
 
                     @Override
@@ -638,10 +780,12 @@ public class WebService {
                             e.printStackTrace();
                         }
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        refreshableView.finishRefreshing();
                     }
                 });
     }
-    public static void getCartList(final int state , final Context mContext) {
+
+    public static void getCartList(final int state, final Context mContext, final RefreshableView refreshableView) {
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -650,7 +794,7 @@ public class WebService {
         OkHttpUtils
                 .post()
                 .url(ConstantUtils.baseUrl + "/cart/list")
-                .addParams("state", state+"")
+                .addParams("state", state + "")
                 .addParams("token", token)
                 .build()
                 .execute(new JsonObjectCallBack() {
@@ -660,6 +804,7 @@ public class WebService {
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        refreshableView.finishRefreshing();
                     }
 
                     @Override
@@ -676,7 +821,7 @@ public class WebService {
                                     List<CartListModel> financeModels = GsonUtils.parserJsonArrayToCartList(data, CartListModel.class);
                                     CartListModel.deleteAll(CartListModel.class);
                                     CartListModel.saveInTx(financeModels);
-                                    EventBus.getDefault().post(new Event.CartListEvent(financeModels,state));
+                                    EventBus.getDefault().post(new Event.CartListEvent(financeModels, state));
                                 }
                             }
                         } catch (JSONException e) {
@@ -684,10 +829,13 @@ public class WebService {
                             e.printStackTrace();
                         }
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        refreshableView.finishRefreshing();
                     }
                 });
     }
-    public static void deleteCartList(String id ,final Context mContext) {
+
+    public static void deleteCartList(String id, final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -695,16 +843,18 @@ public class WebService {
             token = ConstantUtils.default_token;
         OkHttpUtils
                 .post()
-                .url(ConstantUtils.baseUrl + "cart/delete")
+                .url(ConstantUtils.baseUrl + "/cart/delete")
                 .addParams("id", id)
                 .addParams("token", token)
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
                     }
 
                     @Override
@@ -716,10 +866,12 @@ public class WebService {
                             else if (code == 300)
                                 message = "登录过期";
                             else if (code == 200) {
-                                String data = response.getString("datas");
-                                if (data != null && !TextUtils.isEmpty(data)) {
-                                    message = data;
-                                }
+//                                String data = response.getString("datas");
+//                                if (data != null && !TextUtils.isEmpty(data)) {
+                                message = "删除成功";
+//                                }
+                                successCallBack.callBack();
+                                mLoadingDialog.dismiss();
                             }
                         } catch (JSONException e) {
                             message = "请求错误";
@@ -729,7 +881,8 @@ public class WebService {
                     }
                 });
     }
-    public static void addCartList(String id ,String num ,final Context mContext,JsonObjectCallBack objectCallBack) {
+
+    public static void addCartList(String id, String num, final Context mContext, JsonObjectCallBack objectCallBack) {
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -744,7 +897,9 @@ public class WebService {
                 .build()
                 .execute(objectCallBack);
     }
-    public static void addGoodsToCart(String id ,String num ,JsonObjectCallBack objectCallBack) {
+
+    public static void addGoodsToCart(String id, String num, final Context mContext) {
+        loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -757,9 +912,42 @@ public class WebService {
                 .addParams("token", token)
                 .addParams("num", num)
                 .build()
-                .execute(objectCallBack);
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1)
+                                message = "参数为空";
+                            else if (code == 300)
+                                message = "登录过期";
+                            else if (code == 200) {
+//                                String data = response.getString("datas");
+//                                if (data != null && !TextUtils.isEmpty(data)) {
+                                message = "加入购物车成功!";
+//                                }
+                                EventBus.getDefault().post(new Event.AddGoodsToCart());
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+                });
     }
-    public static void buyGoods(String addressId , String id , String num , String way, final Context mContext) {
+
+    public static void buyGoods(String addressId, String id, String num, String way, final Context mContext) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -769,7 +957,7 @@ public class WebService {
         OkHttpUtils
                 .post()
                 .url(ConstantUtils.baseUrl + "/goods/buyGoods")
-                .addParams("id", id)
+                .addParams("goodsId", id)
                 .addParams("addressId", addressId)
                 .addParams("token", token)
                 .addParams("num", num)
@@ -777,6 +965,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -798,6 +987,8 @@ public class WebService {
                                 message = "购买成功!";
 //                                }
                                 EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 2) {
+                                message = "支付失败";
                             }
                         } catch (JSONException e) {
                             message = "请求错误";
@@ -808,7 +999,8 @@ public class WebService {
                     }
                 });
     }
-    public static void buyCart(String addressId , String id , String num , String way, final Context mContext) {
+
+    public static void buyCart(String addressId, String id, String way, final Context mContext) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -821,11 +1013,11 @@ public class WebService {
                 .addParams("coCartIds", id)
                 .addParams("addressId", addressId)
                 .addParams("token", token)
-                .addParams("num", num)
                 .addParams("way", way)
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -857,7 +1049,8 @@ public class WebService {
                     }
                 });
     }
-    public static void refund(String id ,final Context mContext) {
+
+    public static void refund(String id, final Context mContext) {
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -871,6 +1064,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -888,7 +1082,7 @@ public class WebService {
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
-                                    message = "退款成功";
+                                message = "退款成功";
 //                                }
                             }
                         } catch (JSONException e) {
@@ -899,7 +1093,8 @@ public class WebService {
                     }
                 });
     }
-    public static void financeAdopt(String way,String id ,final Context mContext) {
+
+    public static void financeAdopt(String way, String id,String number, final Context mContext) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -908,13 +1103,15 @@ public class WebService {
             token = ConstantUtils.default_token;
         OkHttpUtils
                 .post()
-                .url(ConstantUtils.baseUrl + "/finance/adopt")
+                .url("http://192.168.1.166:8080" + "/finance/adopt")
                 .addParams("financeId", id)
                 .addParams("token", token)
+                .addParams("number", number)
                 .addParams("way", way)
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -933,7 +1130,7 @@ public class WebService {
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
-                                    message = "领养成功";
+                                message = "领养成功";
 //                                }
                             }
                         } catch (JSONException e) {
@@ -945,6 +1142,7 @@ public class WebService {
                     }
                 });
     }
+
     public static void getAddressList(final Context mContext) {
         loading(mContext);
         String token = null;
@@ -959,6 +1157,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -978,7 +1177,7 @@ public class WebService {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<AddressModel> addressModels = GsonUtils.parserJsonArrayToAddress(data, AddressModel.class);
-                                    if (addressModels.size()>0){
+                                    if (addressModels.size() > 0) {
                                         AddressModel.deleteAll(AddressModel.class);
                                         AddressModel.saveInTx(addressModels);
                                     }
@@ -992,10 +1191,12 @@ public class WebService {
                         mLoadingDialog.dismiss();
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         Activity activity = (Activity) mContext;
-                        activity.finish();
+                        Intent intent = new Intent(activity, MainActivity.class);
+                        activity.startActivity(intent);
                     }
                 });
     }
+
     public static void getTypeList(final Context mContext) {
         loading(mContext);
         String token = null;
@@ -1010,6 +1211,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -1029,7 +1231,7 @@ public class WebService {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<AddressModel> addressModels = GsonUtils.parserJsonArrayToAddress(data, AddressModel.class);
-                                    if (addressModels.size()>0){
+                                    if (addressModels.size() > 0) {
                                         AddressModel.deleteAll(AddressModel.class);
                                         AddressModel.saveInTx(addressModels);
                                     }
@@ -1047,6 +1249,7 @@ public class WebService {
                     }
                 });
     }
+
     public static void getUserFinanceList(final Context mContext) {
         loading(mContext);
         String token = null;
@@ -1061,6 +1264,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -1079,10 +1283,11 @@ public class WebService {
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
-                                    List<FinanceModel> addressModels = GsonUtils.parserJsonArrayToFinanceModel(data, FinanceModel.class);
-                                    if (addressModels.size()>0){
+                                    List<FinanceDetailModel> addressModels = GsonUtils.parserJsonArrayToFinanceDetailModel(data, FinanceDetailModel.class);
+                                    if (addressModels.size() > 0) {
                                         FinanceModel.deleteAll(FinanceModel.class);
                                         FinanceModel.saveInTx(addressModels);
+                                        EventBus.getDefault().post(new Event.FinanceDetailEvent(addressModels));
                                     }
 
                                 }
@@ -1093,11 +1298,216 @@ public class WebService {
                         }
                         mLoadingDialog.dismiss();
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                        Activity activity = (Activity) mContext;
-                        activity.finish();
+
                     }
                 });
     }
+
+    public static void getRefundRecord(final Context mContext) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/cart/refundRecord")
+                .addParams("token", token)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1)
+                                message = "参数为空";
+                            else if (code == 300)
+                                message = "登录过期";
+                            else if (code == 200) {
+                                String data = response.getString("datas");
+                                if (data != null && !TextUtils.isEmpty(data)) {
+                                    List<RefundRecordModel> addressModels = GsonUtils.parserJsonArrayToRefundRecordModel(data, RefundRecordModel.class);
+                                    if (addressModels.size() > 0) {
+                                        RefundRecordModel.deleteAll(RefundRecordModel.class);
+                                        RefundRecordModel.saveInTx(addressModels);
+                                        EventBus.getDefault().post(new Event.RefundRecordModelEvent(addressModels));
+                                    }
+
+                                }
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        mLoadingDialog.dismiss();
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public static void getUserUpdate(final Context mContext, String name, String address, String url, String sex) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/user/update")
+                .addParams("token", token)
+                .addParams("name", name)
+                .addParams("url", url)
+                .addParams("sex", sex)
+                .addParams("region", address)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1)
+                                message = "参数为空";
+                            else if (code == 300)
+                                message = "登录过期";
+                            else if (code == 200) {
+                                message = "修改成功";
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        mLoadingDialog.dismiss();
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public static void getConsumeList(final Context mContext, String state, final RefreshableView refreshableView) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/consume/list")
+                .addParams("token", token)
+                .addParams("state", state)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                        refreshableView.finishRefreshing();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1)
+                                message = "参数为空";
+                            else if (code == 300)
+                                message = "登录过期";
+                            else if (code == 200) {
+                                String data = response.getString("datas");
+                                if (data != null && !TextUtils.isEmpty(data)) {
+                                    List<ConsumeModel> addressModels = GsonUtils.parserJsonArrayToConsumeModel(data, ConsumeModel.class);
+                                    if (addressModels.size() > 0) {
+                                        ConsumeModel.deleteAll(ConsumeModel.class);
+                                        ConsumeModel.saveInTx(addressModels);
+                                        EventBus.getDefault().post(new Event.ConsumeModelEvent(addressModels));
+                                    }
+
+                                }
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        mLoadingDialog.dismiss();
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        refreshableView.finishRefreshing();
+                    }
+                });
+    }
+
+    public static void getUserTotalMoney(final Context mContext) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/user/totalMoney")
+                .addParams("token", token)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1)
+                                message = "参数为空";
+                            else if (code == 300)
+                                message = "登录过期";
+                            else if (code == 200) {
+                                String data = response.getString("datas");
+                                if (data != null && !TextUtils.isEmpty(data)) {
+                                    TotalModel totalModel = GsonUtils.parserJsonObjectToTotalModel(data);
+                                    if (totalModel != null) {
+                                        TotalModel.deleteAll(TotalModel.class);
+                                        totalModel.save();
+                                        EventBus.getDefault().post(new Event.TotalModelEvent());
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        mLoadingDialog.dismiss();
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     public static void getUserFinance(final Context mContext) {
         loading(mContext);
         String token = null;
@@ -1112,6 +1522,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -1131,7 +1542,7 @@ public class WebService {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<AddressModel> addressModels = GsonUtils.parserJsonArrayToAddress(data, AddressModel.class);
-                                    if (addressModels.size()>0){
+                                    if (addressModels.size() > 0) {
                                         AddressModel.deleteAll(AddressModel.class);
                                         AddressModel.saveInTx(addressModels);
                                     }
@@ -1149,8 +1560,9 @@ public class WebService {
                     }
                 });
     }
+
     public static void updateAddress(final Context mContext,
-                                     String id ,
+                                     String id,
                                      String name,
                                      String phone,
                                      String region,
@@ -1175,6 +1587,7 @@ public class WebService {
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
+
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         message = "请求错误";
@@ -1223,5 +1636,49 @@ public class WebService {
             mLoadingDialog.setCancelable(true);
             mLoadingDialog.show();
         }
+    }
+
+    public static void getExpress(final Context mContext,
+                                  String number
+
+    ) {
+        loading(mContext);
+
+        OkHttpUtils
+                .get()
+                .url("http://jisukdcx.market.alicloudapi.com/express/query")
+                .addHeader("Authorization","APPCODE e80b1c89c35e4ee588ffb38588910ad5")
+                .addParams("number", number)
+                .addParams("type", "auto")
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            String data = response.getString("result");
+                            ExpressModel expressModel = GsonUtils.parserJsonObjectToExpressModel(data);
+                            ArrayList<ExpressModel.ExpressState> expressStates  = expressModel.getList();
+                            if (expressStates.size()>0){
+                              EventBus.getDefault().post(new Event.ExpressModelEvent(expressStates));
+                            }
+                            message = "修改成功!";
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+                });
     }
 }

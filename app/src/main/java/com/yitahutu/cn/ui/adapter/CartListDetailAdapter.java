@@ -1,6 +1,7 @@
 package com.yitahutu.cn.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,9 +11,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.model.CartListModel;
+import com.yitahutu.cn.model.ExpressModel;
+import com.yitahutu.cn.ui.activity.ExpressListActivity;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,7 +68,7 @@ public class CartListDetailAdapter extends BaseAdapter {
             viewHolder.textCartCount.setText(cartListModel.getNum()+"");
             viewHolder.textCartSum.setText("共计" + cartListModel.getNum() + "件商品");
             viewHolder.textCartTotal.setText("共计￥ " + (cartListModel.getNum() * cartListModel.getPresentPrice()));
-            Picasso.with(mContext).load(cartListModel.getUrl()).into(viewHolder.cartImage);
+            Picasso.with(mContext).load(ConstantUtils.baseUrl+cartListModel.getUrl()).into(viewHolder.cartImage);
 //
             final int state = cartListModel.getState();
             if (state == 1) {
@@ -117,6 +123,7 @@ public class CartListDetailAdapter extends BaseAdapter {
 //
                     }else if (state == 3){
 //                        查看物流
+                        lookExpress(cartListModel);
                     }else if (state == 4){
                         //查看物流
                     }
@@ -138,6 +145,12 @@ public class CartListDetailAdapter extends BaseAdapter {
             });
         }
         return view;
+    }
+
+    private void lookExpress(CartListModel cartListModel) {
+        Intent intent = new Intent(mContext, ExpressListActivity.class);
+        intent.putExtra("number",cartListModel.getTransNumber());
+        mContext.startActivity(intent);
     }
 
 

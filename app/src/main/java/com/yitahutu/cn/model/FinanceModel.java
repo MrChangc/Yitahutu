@@ -19,6 +19,7 @@ public class FinanceModel extends SugarRecord implements Serializable{
      * rate : 0.2
      * sketch : 奶牛介绍奶牛介绍奶牛介绍奶牛介绍奶牛介绍奶牛介绍奶牛介绍
      * sum : 100
+     *
      */
 
     private int alreadySum;
@@ -28,6 +29,7 @@ public class FinanceModel extends SugarRecord implements Serializable{
     private double rate;
     private String sketch;
     private int sum;
+    private String url;
 
     public int getAlreadySum() {
         return alreadySum;
@@ -82,5 +84,13 @@ public class FinanceModel extends SugarRecord implements Serializable{
 
     public void setSum(int sum) {
         this.sum = sum;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
