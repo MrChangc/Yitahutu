@@ -50,17 +50,30 @@
                 android:textSize="@dimen/text_size_xlarge"
                 android:textColor="@color/black"
                 android:text="类目"/>
-            <GridView
-                android:horizontalSpacing="10dp"
-                android:verticalSpacing="10dp"
-                android:numColumns="3"
-                android:id="@+id/recommend_grid_goods"
-                android:background="@color/white"
-                android:layout_marginLeft="10dp"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+                <GridView
+                    android:horizontalSpacing="10dp"
+                    android:verticalSpacing="10dp"
+                    android:numColumns="3"
+                    android:id="@+id/recommend_grid_goods"
+                    android:background="@color/white"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            </GridView>
+                </GridView>
+                <TextView
+                    android:layout_centerInParent="true"
+                    android:text="暂无商品"
+                    android:textSize="@dimen/text_size_xlarge"
+                    android:textColor="@color/black"
+                    android:id="@+id/text_no_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

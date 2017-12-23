@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.MachUtil;
 import com.yitahutu.cn.model.AddressModel;
 import com.yitahutu.cn.model.JsonBean;
 import com.yitahutu.cn.model.JsonFileReader;
@@ -60,11 +61,15 @@ public class AddressDetailActivity extends BaseActivity {
             Toast.makeText(mContext, "姓名不能为空!", Toast.LENGTH_SHORT).show();
         else if (phone == null || TextUtils.isEmpty(phone))
             Toast.makeText(mContext, "手机号不能为空!", Toast.LENGTH_SHORT).show();
+        else if (!MachUtil.isMobileNO(phone))
+            Toast.makeText(mContext, "手机号格式不正确!", Toast.LENGTH_SHORT).show();
         else if (address == null || TextUtils.isEmpty(address))
             Toast.makeText(mContext, "请填写区域地址!", Toast.LENGTH_SHORT).show();
         else if (addressDetail == null || TextUtils.isEmpty(addressDetail))
             Toast.makeText(mContext, "请填写详细地址!", Toast.LENGTH_SHORT).show();
         else if (postalCode == null || TextUtils.isEmpty(postalCode))
+            Toast.makeText(mContext, "请填写邮政编码!", Toast.LENGTH_SHORT).show();
+        else if (!MachUtil.isNumber(postalCode))
             Toast.makeText(mContext, "请填写邮政编码!", Toast.LENGTH_SHORT).show();
         else {
             addressModel.setName(userName);

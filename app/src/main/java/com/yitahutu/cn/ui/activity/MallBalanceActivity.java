@@ -84,6 +84,7 @@ public class MallBalanceActivity extends BaseActivity {
     private String cartList;
     private String goodsId;
     private String idGoods;
+    private int num;
 
     @Override
     void setRightIconListener() {
@@ -98,8 +99,8 @@ public class MallBalanceActivity extends BaseActivity {
         ArrayList<CartListModel> cartListModels = (ArrayList<CartListModel>) getIntent().getExtras().getSerializable("list");
         cartList = getIntent().getStringExtra("id_list");
         goodsId = getIntent().getStringExtra("id");
+        num = getIntent().getIntExtra("number",1);
         goodsModel = (GoodsModel) getIntent().getExtras().getSerializable("goods");
-
         ButterKnife.bind(this);
         if (cartListModels != null) {
             initAdapter(cartListModels);
@@ -113,8 +114,8 @@ public class MallBalanceActivity extends BaseActivity {
         llGoodsInfo.setVisibility(View.VISIBLE);
         textGoodsName.setText(goodsModel.getName());
         textGoodsPrice.setText("￥ " + goodsModel.getPresentPrice());
-        textCount.setText("1");
-        textTotal.setText(goodsModel.getPresentPrice() + "");
+        textCount.setText(num+"");
+        textTotal.setText(goodsModel.getPresentPrice()*num + "");
         Picasso.with(mContext).load(ConstantUtils.baseUrl + goodsModel.getCoverUrl()).into(imageGoods);
     }
 
@@ -127,7 +128,7 @@ public class MallBalanceActivity extends BaseActivity {
         llGoodsInfo.setVisibility(View.GONE);
         balanceAdapter = new MallBalanceAdapter(cartListModels, mContext, textTotal);
         listBalance.setAdapter(balanceAdapter);
-        textTotal.setText(price + "");
+        textTotal.setText(price*num + "");
     }
 
     @OnClick({R.id.ll_address_info, R.id.payment, R.id.image_add, R.id.image_minus})
@@ -145,14 +146,16 @@ public class MallBalanceActivity extends BaseActivity {
                 break;
             case R.id.image_add:
                 if (goodsModel != null) {
-                    textCount.setText((Integer.valueOf(textCount.getText().toString()) + 1) + "");
+                    num++;
+                    textCount.setText(num + "");
                 }
                 break;
             case R.id.image_minus:
                 if (goodsModel != null) {
-                    if (Integer.valueOf(textCount.getText().toString()) > 1)
-                        textCount.setText((Integer.valueOf(textCount.getText().toString()) - 1) + "");
-                    else
+                    if (num > 1) {
+                        num--;
+                        textCount.setText(num + "");
+                    } else
                         Toast.makeText(mContext, "个数不能少于1!", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -217,7 +220,7 @@ public class MallBalanceActivity extends BaseActivity {
         if (MyApplication.getUserInfoModel() != null) {
             paymentDialog.setTextNumber(MyApplication.getUserInfoModel().getName());
         }
-        paymentDialog.setTextCount(Integer.valueOf(textCount.getText().toString()) + "");
+        paymentDialog.setTextCount(textTotal.getText().toString());
         paymentDialog.setTextType("牛币");
         paymentDialog.show();
 //        }else

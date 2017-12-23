@@ -17,6 +17,12 @@ public class MachUtil {
         System.out.println(m.matches() + "---");
         return m.matches();
     }
+    public static boolean isNumber(String number) {
+        Pattern p = Pattern.compile("^[0-9]*$ ");
+        Matcher m = p.matcher(number);
+        System.out.println(m.matches() + "---");
+        return m.matches();
+    }
     public static boolean isPassword(String mobiles) {
         Pattern p = Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$");
         Matcher m = p.matcher(mobiles);

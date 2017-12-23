@@ -5,7 +5,10 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.yitahutu.cn.model.RecommendModel;
+import com.yitahutu.cn.model.SignModel;
 import com.yitahutu.cn.model.UserInfoModel;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +44,11 @@ public class PreferUtil {
     }
 
     public static void setUserInfoModel(String userInfoModel) {
-        spHelper.putString("userName", userInfoModel);
+        spHelper.putString("userInfoModel", userInfoModel);
     }
 
     public static UserInfoModel getUserInfoModel() {
-        String user = spHelper.getString("userName", null);
+        String user = spHelper.getString("userInfoModel", null);
         UserInfoModel userInfoModel = new Gson().fromJson(user, UserInfoModel.class);
         return userInfoModel;
     }
@@ -76,6 +79,19 @@ public class PreferUtil {
     public static void putNetWork(boolean isLogin) {
         spHelper.putBoolean("is_network", isLogin);
     }
+
+    public static void setSignModel(String list) {
+        spHelper.putString("RecommendModelList", list);
+    }
+
+    public static SignModel getSignModel() throws JSONException {
+        String json = spHelper.getString("RecommendModelList", null);
+        if (json != null && !TextUtils.isEmpty(json))
+            return GsonUtils.parserJsonObjectToSignModel(json);
+        else
+            return new SignModel();
+    }
+
 
 
 }

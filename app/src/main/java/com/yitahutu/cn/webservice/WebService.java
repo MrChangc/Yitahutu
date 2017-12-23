@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.yitahutu.cn.MyApplication;
 import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.Utils.GsonUtils;
@@ -22,6 +23,7 @@ import com.yitahutu.cn.model.FinanceModel;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.model.RecommendModel;
 import com.yitahutu.cn.model.RefundRecordModel;
+import com.yitahutu.cn.model.SignModel;
 import com.yitahutu.cn.model.TotalModel;
 import com.yitahutu.cn.model.UserInfoModel;
 import com.yitahutu.cn.ui.View.QdLoadingDialog;
@@ -67,19 +69,27 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1){
                                 message = "手机号不能为空";
-                            else if (code == 2)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 2){
                                 message = "没有选择类型";
-                            else if (code == 3)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 3){
                                 message = "用户还没组册";
-                            else if (code == 4)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 4){
                                 message = "用户还没组册";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -107,16 +117,26 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1){
                                 message = "手机号不能为空";
-                            else if (code == 2)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 2){
                                 message = "密码不能为空";
-                            else if (code == 3)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 3){
                                 message = "验证码不能为空";
-                            else if (code == 4)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 4){
                                 message = "验证码不正确";
-                            else if (code == 5)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 5){
                                 message = "两次输入密码不一致";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "注册成功!";
                                 Intent intent = new Intent(mContext, MainActivity.class);
@@ -125,8 +145,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -152,10 +172,10 @@ public class WebService {
 
     public static void getUserInfo(final Context mContext) {
         String token = null;
-//        if (PreferUtil.isLogin())
-//            token = PreferUtil.getToken(PreferUtil.getUserName());
-//        else
-        token = ConstantUtils.default_token;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
         OkHttpUtils
                 .post()
                 .url(ConstantUtils.baseUrl + "/user/person")
@@ -191,6 +211,53 @@ public class WebService {
                     }
                 });
     }
+    public static void getUserInfo(final Context mContext, final SuccessCallBack successCallBack) {
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/user/person")
+                .addParams("token", token)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        String message = "";
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 200) {
+                                message = "登录成功";
+                                String data = response.getString("datas");
+                                UserInfoModel userInfoModel = new Gson().fromJson(data, UserInfoModel.class);
+                                PreferUtil.setUserInfoModel(data);
+                                MyApplication.setUserInfoModel(userInfoModel);
+                                successCallBack.callBack();
+                                EventBus.getDefault().post(new Event.UserInfoEvent());
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
     public static void getGoodsList(final Context mContext) {
         String token = null;
@@ -216,10 +283,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
@@ -233,8 +304,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -264,22 +335,25 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
-                                if (goodsModels.size() > 0)
-                                    EventBus.getDefault().post(new Event.GoodsByRecommendEvent(goodsModels));
+                                EventBus.getDefault().post(new Event.GoodsByRecommendEvent(goodsModels));
                             }
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -325,10 +399,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
@@ -339,8 +417,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         if (refreshableView != null)
                             refreshableView.finishRefreshing();
                     }
@@ -373,10 +451,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
@@ -387,8 +469,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -420,10 +502,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
@@ -434,8 +520,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -467,10 +553,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
@@ -481,8 +571,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -516,10 +606,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取评论成功";
                                 String data = response.getString("datas");
@@ -534,8 +628,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                         refreshableView.finishRefreshing();
                     }
@@ -571,10 +665,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取评论成功";
                                 String data = response.getString("datas");
@@ -589,8 +687,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                         refreshableView.finishRefreshing();
                     }
@@ -621,10 +719,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
@@ -671,10 +773,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
@@ -686,8 +792,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -718,10 +824,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -731,8 +841,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -762,10 +872,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -778,8 +892,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         refreshableView.finishRefreshing();
                     }
                 });
@@ -811,10 +925,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -827,8 +945,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         refreshableView.finishRefreshing();
                     }
                 });
@@ -861,10 +979,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
@@ -876,8 +998,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -926,10 +1048,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
@@ -940,8 +1066,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
                 });
@@ -977,10 +1103,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
@@ -993,8 +1123,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
                 });
@@ -1029,10 +1159,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
@@ -1043,8 +1177,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
                 });
@@ -1075,10 +1209,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
@@ -1088,13 +1226,13 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    public static void financeAdopt(String way, String id,String number, final Context mContext) {
+    public static void financeAdopt(String way, String id, String number, final Context mContext) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -1103,11 +1241,11 @@ public class WebService {
             token = ConstantUtils.default_token;
         OkHttpUtils
                 .post()
-                .url("http://192.168.1.166:8080" + "/finance/adopt")
+                .url(ConstantUtils.baseUrl + "/finance/adopt")
                 .addParams("financeId", id)
                 .addParams("token", token)
                 .addParams("number", number)
-                .addParams("way", way)
+                .addParams("way", "0")
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
@@ -1123,10 +1261,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
@@ -1136,8 +1278,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
                 });
@@ -1169,10 +1311,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -1187,9 +1333,9 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
                         mLoadingDialog.dismiss();
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         Activity activity = (Activity) mContext;
                         Intent intent = new Intent(activity, MainActivity.class);
                         activity.startActivity(intent);
@@ -1276,10 +1422,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -1295,9 +1445,9 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
                         mLoadingDialog.dismiss();
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -1329,10 +1479,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -1348,9 +1502,9 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
                         mLoadingDialog.dismiss();
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -1385,19 +1539,23 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 message = "修改成功";
                             }
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
                         mLoadingDialog.dismiss();
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -1430,10 +1588,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -1449,9 +1611,9 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
                         mLoadingDialog.dismiss();
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         refreshableView.finishRefreshing();
                     }
                 });
@@ -1483,10 +1645,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -1501,9 +1667,9 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
                         mLoadingDialog.dismiss();
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -1600,10 +1766,14 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
                                 message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
                             else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
@@ -1619,8 +1789,8 @@ public class WebService {
                         } catch (JSONException e) {
                             message = "请求错误";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                         Activity activity = (Activity) mContext;
                         activity.finish();
@@ -1639,15 +1809,13 @@ public class WebService {
     }
 
     public static void getExpress(final Context mContext,
-                                  String number
-
-    ) {
+                                  String number) {
         loading(mContext);
 
         OkHttpUtils
                 .get()
                 .url("http://jisukdcx.market.alicloudapi.com/express/query")
-                .addHeader("Authorization","APPCODE e80b1c89c35e4ee588ffb38588910ad5")
+                .addHeader("Authorization", "APPCODE e80b1c89c35e4ee588ffb38588910ad5")
                 .addParams("number", number)
                 .addParams("type", "auto")
                 .build()
@@ -1667,9 +1835,9 @@ public class WebService {
                         try {
                             String data = response.getString("result");
                             ExpressModel expressModel = GsonUtils.parserJsonObjectToExpressModel(data);
-                            ArrayList<ExpressModel.ExpressState> expressStates  = expressModel.getList();
-                            if (expressStates.size()>0){
-                              EventBus.getDefault().post(new Event.ExpressModelEvent(expressStates));
+                            ArrayList<ExpressModel.ExpressState> expressStates = expressModel.getList();
+                            if (expressStates.size() > 0) {
+                                EventBus.getDefault().post(new Event.ExpressModelEvent(expressStates));
                             }
                             message = "修改成功!";
                         } catch (JSONException e) {
@@ -1677,6 +1845,230 @@ public class WebService {
                             e.printStackTrace();
                         }
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void getSign(final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
+
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/sign/getSign")
+                .addParams("token", token)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 200) {
+//
+                                String data = response.getString("datas");
+                                if (data != null && !TextUtils.isEmpty(data)) {
+                                    PreferUtil.setSignModel(data);
+                                    SignModel signModel = GsonUtils.parserJsonObjectToSignModel(data);
+                                    successCallBack.callBackToObject(signModel);
+                                }
+                                message = "修改成功!";
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void sign(final Context mContext, String type, String createTime, String integral,
+                            final SuccessCallBack successCallBack) {
+        loading(mContext);
+
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/sign/sign")
+                .addParams("token", token)
+                .addParams("type", type)
+                .addParams("integral", integral)
+                .addParams("createTime", createTime)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+
+                            } else if (code == 200) {
+//
+                                String data = response.getString("message");
+
+                                message = data;
+                                successCallBack.callBackToObject(data);
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void buyVip(String num, String way, final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/user/buyVip")
+                .addParams("token", token)
+                .addParams("num", num)
+                .addParams("way", way)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 200) {
+//                                String data = response.getString("datas");
+//                                if (data != null && !TextUtils.isEmpty(data)) {
+                                message = "购买成功!";
+                                successCallBack.callBack();
+//                                }
+                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 2) {
+                                message = "支付失败";
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+    public static void alipayStatic(String state, String orderNum, final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/goods/alipayStatic")
+                .addParams("token", token)
+                .addParams("state", state)
+                .addParams("orderNum", orderNum)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "请求错误";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 300){
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                            else if (code == 200) {
+//                                String data = response.getString("datas");
+//                                if (data != null && !TextUtils.isEmpty(data)) {
+                                message = "购买成功!";
+                                successCallBack.callBack();
+//                                }
+                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 2) {
+                                message = "支付失败";
+                            }
+                        } catch (JSONException e) {
+                            message = "请求错误";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
                         mLoadingDialog.dismiss();
                     }
                 });

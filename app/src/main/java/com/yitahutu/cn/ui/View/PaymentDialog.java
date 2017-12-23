@@ -56,6 +56,7 @@ public class PaymentDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 balanceOnClick.onBalance();
+                dismiss();
             }
         });
         Activity activity = (Activity) mContext;

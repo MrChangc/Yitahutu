@@ -26,6 +26,7 @@ import com.yitahutu.cn.ui.activity.MessageActivity;
 import com.yitahutu.cn.ui.activity.RechargeActivity;
 import com.yitahutu.cn.ui.activity.SettingActivity;
 import com.yitahutu.cn.ui.activity.ShoppingActivity;
+import com.yitahutu.cn.ui.activity.SignActivity;
 import com.yitahutu.cn.ui.activity.UserLoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,6 +61,8 @@ public class UserInfoFragment extends Fragment {
     @BindView(R.id.text_user_name)
     TextView textView;
     Unbinder unbinder;
+    @BindView(R.id.ll_user_sign)
+    LinearLayout llUserSign;
     private View rootView;
 
     @Override
@@ -81,7 +84,7 @@ public class UserInfoFragment extends Fragment {
         UserInfoModel userInfoModel = MyApplication.getUserInfoModel();
         if (userInfoModel != null) {
             textView.setText(userInfoModel.getName());
-            Picasso.with(getActivity()).load(ConstantUtils.baseUrl+userInfoModel.getUrl()).into(imageView);
+            Picasso.with(getActivity()).load(ConstantUtils.baseUrl + userInfoModel.getUrl()).into(imageView);
         }
 
     }
@@ -182,5 +185,11 @@ public class UserInfoFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(Event.UserInfoEvent infoEvent) {
         setData();
+    }
+
+    @OnClick(R.id.ll_user_sign)
+    public void onViewClicked() {
+        Intent intent = new Intent(getActivity(), SignActivity.class);
+        getActivity().startActivity(intent);
     }
 }

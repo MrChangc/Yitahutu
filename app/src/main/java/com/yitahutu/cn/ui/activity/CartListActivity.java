@@ -73,10 +73,10 @@ public class CartListActivity extends BaseActivity {
         listCartGoods.setAdapter(listAdpater);
         if (models.size() > 0) {
             textNoData.setVisibility(View.GONE);
-            refreshView.setVisibility(View.VISIBLE);
+            listCartGoods.setVisibility(View.VISIBLE);
         } else {
             textNoData.setVisibility(View.VISIBLE);
-            refreshView.setVisibility(View.GONE);
+            listCartGoods.setVisibility(View.GONE);
         }
     }
 
@@ -93,10 +93,10 @@ public class CartListActivity extends BaseActivity {
         listAdpater.notifyDataSetChanged();
         if (cartListModels.size() > 0) {
             textNoData.setVisibility(View.GONE);
-            refreshView.setVisibility(View.VISIBLE);
+            listCartGoods.setVisibility(View.VISIBLE);
         } else {
             textNoData.setVisibility(View.VISIBLE);
-            refreshView.setVisibility(View.GONE);
+            listCartGoods.setVisibility(View.GONE);
         }
     }
 

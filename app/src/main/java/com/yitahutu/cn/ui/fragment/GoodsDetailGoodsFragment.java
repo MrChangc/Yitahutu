@@ -45,10 +45,14 @@ import butterknife.Unbinder;
  * Created by Administrator on 2017\10\24 0024.
  */
 public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickListener {
-    @BindView(R.id.text_cart_total)
-    TextView textCartTotal;
     @BindView(R.id.image_goto_cart)
     ImageView imageGotoCart;
+    @BindView(R.id.add_cart)
+    LinearLayout addCart;
+    @BindView(R.id.text_freight)
+    TextView textFreight;
+    @BindView(R.id.month_sales)
+    TextView monthSales;
     private long id = -1;
     @BindView(R.id.Convenient_banner_goods_detail)
     ConvenientBanner ConvenientBannerGoodsDetail;
@@ -103,10 +107,15 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
     private void setData() {
         if (goodsModel != null) {
             textName.setText(goodsModel.getName());
-            textPrice.setText(goodsModel.getPresentPrice() + "");
-            textPriceFavourable.setText(goodsModel.getOriginalPrice() + "");
+            textPrice.setText("￥ "+goodsModel.getPresentPrice());
+            textPriceFavourable.setText("￥ "+goodsModel.getOriginalPrice());
             textSynopsis.setText(goodsModel.getIntroduce());
             textGoodsTotal.setText("￥ " + (goodsModel.getPresentPrice() * Integer.valueOf(textGoodsCount.getText().toString())));
+            if (goodsModel.getMonthSales()!=null)
+                monthSales.setText(""+0);
+            else
+                monthSales.setText(goodsModel.getMonthSales()+"");
+            textFreight.setText("￥ "+goodsModel.getFreight());
         }
     }
 
@@ -116,13 +125,14 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
         unbinder.unbind();
     }
 
-    @OnClick({R.id.image_add, R.id.image_minus, R.id.ll_add_cart, R.id.ll_buying, R.id.payment})
+    @OnClick({R.id.image_add, R.id.image_minus, R.id.ll_add_cart, R.id.ll_buying, R.id.payment, R.id.add_cart})
     public void onViewClicked(View view) {
 
         switch (view.getId()) {
             case R.id.image_add:
                 num++;
                 textGoodsCount.setText((num) + "");
+                textGoodsTotal.setText(num * goodsModel.getPresentPrice() + "");
                 break;
             case R.id.image_minus:
                 if (num <= 1)
@@ -130,6 +140,7 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
                 else {
                     num--;
                     textGoodsCount.setText((num) + "");
+                    textGoodsTotal.setText(num * goodsModel.getPresentPrice() + "");
                 }
                 break;
             case R.id.ll_add_cart:
@@ -145,14 +156,22 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
                     Toast.makeText(getActivity(), "请先登录!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.payment:
-                Intent intent = new Intent(getActivity(), CartListActivity.class);
-                getActivity().startActivity(intent);
+                if (PreferUtil.isLogin())
+                    gotoBalance();
+                else
+                    Toast.makeText(getActivity(), "请先登录!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.add_cart:
+                if (PreferUtil.isLogin())
+                    llAddCart();
+                else
+                    Toast.makeText(getActivity(), "请先登录!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
     private void llAddCart() {
-        WebService.addGoodsToCart(goodsModel.getId() + "", textGoodsCount.getText().toString(), getActivity());
+        WebService.addGoodsToCart(goodsModel.getId() + "", num + "", getActivity());
     }
 
     private void gotoBalance() {
@@ -161,6 +180,8 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
         bundle.putSerializable("goods", goodsModel);
         intent.putExtras(bundle);
         intent.putExtra("id", goodsModel.getId() + "");
+        intent.putExtra("number", num);
+
         startActivity(intent);
     }
 
@@ -213,9 +234,10 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
 
     @OnClick(R.id.image_goto_cart)
     public void onViewClicked() {
-        Intent intent = new Intent(getActivity(),CartListActivity.class);
+        Intent intent = new Intent(getActivity(), CartListActivity.class);
         getActivity().startActivity(intent);
     }
+
 
     private class LocalImageHolderView implements Holder<String> {
         private ImageView imageView;
@@ -245,8 +267,5 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(Event.AddGoodsToCart addGoodsToCart) {
         num = 1;
-        totalNum = totalNum+(goodsModel.getPresentPrice() * num);
-        textCartTotal.setText(totalNum + "￥");
-        payment.setBackgroundColor(getResources().getColor(R.color.red));
     }
 }

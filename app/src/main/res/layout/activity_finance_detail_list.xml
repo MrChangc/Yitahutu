@@ -22,7 +22,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:background="@color/title_back_ground"/>
+                    android:background="#FFFF00"/>
                 <TextView
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/gray"
@@ -35,7 +35,7 @@
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_xlarge"
-                    android:text="1200"
+                    android:text="0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -48,7 +48,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:background="@color/title_back_ground"/>
+                    android:background="#4169E1"/>
                 <TextView
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/gray"
@@ -61,7 +61,7 @@
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_xlarge"
-                    android:text="1200"
+                    android:text="0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -74,7 +74,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:background="@color/title_back_ground"/>
+                    android:background="#FF0000"/>
                 <TextView
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/gray"
@@ -87,11 +87,12 @@
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_xlarge"
-                    android:text="1200"
+                    android:text="0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -100,7 +101,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:background="@color/title_back_ground"/>
+                    android:background="#7CFC00"/>
                 <TextView
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/gray"
@@ -141,7 +142,7 @@
             android:layout_gravity="center"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_xlarge"
-            android:text="网络异常!"
+            android:text="请购买理财产品!"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </FrameLayout>

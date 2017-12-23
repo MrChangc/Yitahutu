@@ -19,6 +19,7 @@ import com.yitahutu.cn.ui.activity.MainActivity;
 import com.yitahutu.cn.ui.activity.MemberActivity;
 import com.yitahutu.cn.ui.activity.RechargeActivity;
 import com.yitahutu.cn.ui.activity.RegisterActivity;
+import com.yitahutu.cn.ui.activity.TestActivity;
 import com.yitahutu.cn.ui.activity.UserLoginActivity;
 
 import butterknife.BindView;

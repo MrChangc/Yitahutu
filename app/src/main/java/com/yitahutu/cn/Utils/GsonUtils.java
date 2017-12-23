@@ -15,8 +15,12 @@ import com.yitahutu.cn.model.FinanceModel;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.model.RecommendModel;
 import com.yitahutu.cn.model.RefundRecordModel;
+import com.yitahutu.cn.model.SignModel;
 import com.yitahutu.cn.model.TotalModel;
 import com.yitahutu.cn.model.UserInfoModel;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -100,6 +104,20 @@ public class GsonUtils {
     public static TotalModel parserJsonObjectToTotalModel(String strJson) {
         Gson gson = new Gson();
         TotalModel evaluateAll = gson.fromJson(strJson, TotalModel.class);
+        return evaluateAll;
+    }
+    public static SignModel parserJsonObjectToSignModel(String strJson) throws JSONException {
+        Gson gson = new Gson();
+        SignModel evaluateAll = gson.fromJson(strJson, SignModel.class);
+        JSONObject jsonObject = new JSONObject(strJson);
+        String sign = jsonObject.getString("coSignIn2");
+        SignModel.Sign sign1 = parserJsonObjectToSign(sign);
+        evaluateAll.setSign(sign1);
+        return evaluateAll;
+    }
+    public static SignModel.Sign parserJsonObjectToSign(String strJson) {
+        Gson gson = new Gson();
+        SignModel.Sign evaluateAll = gson.fromJson(strJson, SignModel.Sign.class);
         return evaluateAll;
     }
     public static ExpressModel parserJsonObjectToExpressModel(String strJson) {

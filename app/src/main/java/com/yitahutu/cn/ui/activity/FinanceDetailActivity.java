@@ -153,6 +153,7 @@ public class FinanceDetailActivity extends BaseActivity implements OnItemClickLi
                     bundle.putSerializable("finance", financeDetailModel);
                 intent.putExtras(bundle);
                 intent.putExtra("number",Integer.valueOf(textCount.getText().toString()));
+                intent.putExtra("id",financeModel.getId());
                 startActivity(intent);
             }else {
                 Toast.makeText(mContext,"请先登录!",Toast.LENGTH_SHORT).show();

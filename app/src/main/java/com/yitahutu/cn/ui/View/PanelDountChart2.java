@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.yitahutu.cn.R;
 
@@ -18,30 +19,33 @@ public class PanelDountChart2 extends View {
 
     //演示用的百分比例,实际使用中，即为外部传入的比例参数
     private float[] arrPer = new float[]{20f, 30f, 10f, 40f};
-    //RGB颜色数组
-    private final int arrColorRgb[] = {
-//            R.color.title_back_ground,
-//            R.color.balance,
-//            R.color.commission,
-//            R.color.share_ut_bonus
-            R.color.title_back_ground,
-            R.color.yellow,
-            R.color.blue,
-            R.color.black
-    };
-
-
-    public PanelDountChart2(Context context,float[] ints) {
+    private final int arrColorRgb[][] = {{255, 255, 0},//#FFFF00
+            {65, 105, 225},//#4169E1
+            {255, 0, 0},//#FF0000
+            {124, 252, 0}};//#7CFC00
+    public PanelDountChart2(Context context, float[] ints) {
         super(context);
         // TODO Auto-generated constructor stub
-//        arrPer = ints;
+        arrPer = ints;
     }
 
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        ScrHeight = heightMeasureSpec;
+//        ScrWidth = widthMeasureSpec;
+//        ViewGroup mViewGroup = (ViewGroup) getParent();
+//        if(null != mViewGroup){
+//            int mParentWidth = mViewGroup.getWidth();
+//            int mParentHeight = mViewGroup.getHeight();
+//        }
+//    }
+
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        ScrHeight = heightMeasureSpec;
-        ScrWidth = widthMeasureSpec;
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        ScrHeight = w;
+        ScrWidth = h;
     }
 
     public void onDraw(Canvas canvas) {
@@ -71,7 +75,7 @@ public class PanelDountChart2 extends View {
             Percentage = 360 * (arrPer[i] / 100);
             Percentage = (float) (Math.round(Percentage * 100)) / 100;
             //分配颜色
-            PaintArc.setColor(arrColorRgb[i]);
+            PaintArc.setARGB(255, arrColorRgb[i][0], arrColorRgb[i][1], arrColorRgb[i][2]);
             //在饼图中显示所占比例
             canvas.drawArc(arcRF0, CurrPer, Percentage, true, PaintArc);
             //下次的起始角度
@@ -79,7 +83,7 @@ public class PanelDountChart2 extends View {
         }
 
         //画圆心
-        PaintArc.setColor(Color.RED);
+        PaintArc.setColor(Color.WHITE);
         canvas.drawCircle(cirX, cirY, radius / 2, PaintArc);
 
     }

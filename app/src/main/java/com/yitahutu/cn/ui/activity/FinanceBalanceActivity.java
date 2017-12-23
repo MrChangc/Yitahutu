@@ -88,6 +88,7 @@ public class FinanceBalanceActivity extends BaseActivity {
         setContentView("购买商品", R.layout.activity_finance_balance);
         ButterKnife.bind(this);
         number = getIntent().getIntExtra("number",1);
+        financeId = getIntent().getLongExtra("id",1)+"";
         setData();
         textCount.setText(number+"");
     }
@@ -110,7 +111,6 @@ public class FinanceBalanceActivity extends BaseActivity {
             }
             price = financeModel.getPrice();
             textTotal.setText(price+"");
-            financeId = financeModel.getId()+"";
         }else if (object instanceof FinanceDetailModel){
             FinanceDetailModel financeModel = (FinanceDetailModel) object;
             textGoodsName.setText(financeModel.getHeadline());
@@ -126,7 +126,6 @@ public class FinanceBalanceActivity extends BaseActivity {
             }
             price = financeModel.getPrice();
             textTotal.setText(price+"");
-            financeId = financeModel.getId()+"";
         }
     }
 

@@ -3,18 +3,23 @@ package com.yitahutu.cn.ui.activity;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
 import com.yitahutu.cn.R;
+import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.model.JsonBean;
 import com.yitahutu.cn.model.JsonFileReader;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,17 +34,43 @@ public class TestActivity extends Activity {
     private ArrayList<JsonBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+    private Handler handler = new Handler(){
+        @Override
+        public void dispatchMessage(Message msg) {
+            super.dispatchMessage(msg);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
-        initJsonData();
+//        initJsonData();
     }
 
     @OnClick(R.id.text)
     public void onViewClicked() {
-        showPickerView();
+//        showPickerView();
+        aplay();
+    }
+
+    private void aplay() {
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(TestActivity.this);
+                Map<String,String> result = alipay.payV2(ConstantUtils.ORDER_NUMBER,true);
+
+                Message msg = new Message();
+                msg.what = 1;
+                msg.obj = result;
+                handler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
     }
 
     private void initJsonData() {   //解析数据

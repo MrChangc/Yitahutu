@@ -30,6 +30,7 @@ public class UserInfoModel extends SugarRecord{
     private String url;
     private int vip;
     private int wallet;
+    private long vipExpireTime;
 
     public long getCreateTime() {
         return createTime;
@@ -113,5 +114,11 @@ public class UserInfoModel extends SugarRecord{
         this.wallet = wallet;
     }
 
+    public long getVipExpireTime() {
+        return vipExpireTime;
+    }
 
+    public void setVipExpireTime(long vipExpireTime) {
+        this.vipExpireTime = vipExpireTime;
+    }
 }

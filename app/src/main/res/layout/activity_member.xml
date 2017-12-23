@@ -2,30 +2,171 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-    <ScrollView
+    android:background="@color/color_background">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:layout_weight="3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/title_back_ground">
+        <ImageView
+            android:background="@mipmap/member_head"
+            android:id="@+id/image_head"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
         <LinearLayout
+            android:layout_marginLeft="10dp"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/member_one"/>
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/member_two"/>
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/member_three"/>
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/member_four"/>
+                android:id="@+id/iv_image"
+                android:src="@mipmap/member_vip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_member_name"
+                android:textSize="@dimen/text_size_large"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_member_data"
+                android:textSize="@dimen/text_size_large"
+                android:textColor="@color/white"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
-    </ScrollView>
+
+    </LinearLayout>
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_weight="1"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <LinearLayout
+           android:padding="10dp"
+           android:gravity="center_vertical"
+           android:layout_marginTop="10dp"
+           android:background="@color/white"
+           android:layout_width="match_parent"
+           android:layout_height="60dp">
+           <TextView
+               android:layout_weight="1"
+               android:textSize="@dimen/text_size_xlarge"
+               android:text="1个月10元"
+               android:textColor="@color/black"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+           <LinearLayout
+               android:id="@+id/ll_button1"
+               android:padding="5dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@drawable/green_button_member_shape">
+               <TextView
+                   android:textSize="@dimen/text_size_xlarge"
+                   android:text="开通"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:textColor="@color/white"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+           </LinearLayout>
+       </LinearLayout>
+       <LinearLayout
+           android:padding="10dp"
+           android:gravity="center_vertical"
+           android:layout_marginTop="10dp"
+           android:background="@color/white"
+           android:layout_width="match_parent"
+           android:layout_height="60dp">
+           <TextView
+               android:layout_weight="1"
+               android:textSize="@dimen/text_size_xlarge"
+               android:text="3个月20元"
+               android:textColor="@color/black"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+           <LinearLayout
+               android:id="@+id/ll_button2"
+               android:padding="5dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@drawable/green_button_member_shape">
+               <TextView
+                   android:textSize="@dimen/text_size_xlarge"
+                   android:text="开通"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:textColor="@color/white"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+           </LinearLayout>
+       </LinearLayout>
+       <LinearLayout
+           android:padding="10dp"
+           android:gravity="center_vertical"
+           android:layout_marginTop="10dp"
+           android:background="@color/white"
+           android:layout_width="match_parent"
+           android:layout_height="60dp">
+           <TextView
+               android:layout_weight="1"
+               android:textSize="@dimen/text_size_xlarge"
+               android:text="6个月30元"
+               android:textColor="@color/black"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+           <LinearLayout
+               android:id="@+id/ll_button3"
+               android:padding="5dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@drawable/green_button_member_shape">
+               <TextView
+                   android:textSize="@dimen/text_size_xlarge"
+                   android:text="开通"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:textColor="@color/white"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+           </LinearLayout>
+       </LinearLayout>
+       <LinearLayout
+           android:padding="10dp"
+           android:gravity="center_vertical"
+           android:layout_marginTop="10dp"
+           android:background="@color/white"
+           android:layout_width="match_parent"
+           android:layout_height="60dp">
+           <TextView
+               android:layout_weight="1"
+               android:textSize="@dimen/text_size_xlarge"
+               android:text="12个月50元"
+               android:textColor="@color/black"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+           <LinearLayout
+               android:id="@+id/ll_button4"
+               android:padding="5dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@drawable/green_button_member_shape">
+               <TextView
+                   android:textSize="@dimen/text_size_xlarge"
+                   android:text="开通"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:textColor="@color/white"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+           </LinearLayout>
+       </LinearLayout>
+
+   </LinearLayout>
 </LinearLayout>

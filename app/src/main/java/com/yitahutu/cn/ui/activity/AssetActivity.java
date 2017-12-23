@@ -70,7 +70,7 @@ public class AssetActivity extends BaseActivity {
             TotalModel totalModel = totalModels.get(0);
             textBalance.setText(totalModel.getWallet()+"");
             textInvestment.setText(totalModel.getAggregate()+"");
-            textCommission.setText("0");
+            textCommission.setText("0.0");
             shareOutBonus.setText(totalModel.getDividend()+"");
             textIncome.setText(totalModel.getYesteday()+"");
             textAssetCount.setText(totalModel.getTotalMoney()+"");

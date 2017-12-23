@@ -61,10 +61,10 @@ public class MyChatView extends View {
     }
 
     private void drawText(Canvas canvas) {
-        textPaint.setColor(getResources().getColor(R.color.color_background));
-        canvas.drawText("已 售 "+rate*100+" %", mWidth/4, mHeight/4+20, textPaint);
+        textPaint.setColor(getResources().getColor(R.color.black));
+        canvas.drawText("已 售 "+rate*100+" %", mWidth/5, mHeight/4+20, textPaint);
         textPaint.setColor(getResources().getColor(R.color.title_back_ground));
-        canvas.drawText("立 即 购 买", mWidth/4, mHeight/4*3-20, textPaint);
+        canvas.drawText("立 即 购 买", mWidth/5, mHeight/4*3-20, textPaint);
     }
 
     private void initPaint() {

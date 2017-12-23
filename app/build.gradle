@@ -8,8 +8,8 @@ android {
         applicationId "com.yitahutu.cn"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 10002
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -34,4 +34,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:design:25.3.1'
     compile 'com.contrarywind:Android-PickerView:3.2.6'
+    compile files('libs/alipaySdk-20170922.jar')
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 }

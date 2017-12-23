@@ -68,6 +68,8 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
     @BindView(R.id.edit_search)
     EditText editSearch;
     LinearLayout contextView;
+    @BindView(R.id.ll_four)
+    LinearLayout llFour;
     private View rootView;
     private ConvenientBanner convenientBanner;
     private List<String> images = new ArrayList<>();
@@ -108,7 +110,7 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 String name = textView.getText().toString();
-                WebService.getGoodsListBySerch(getActivity(), name, "", "", "", "", "", "",null);
+                WebService.getGoodsListBySerch(getActivity(), name, "", "", "", "", "", "", null);
                 return true;
             }
         });
@@ -183,7 +185,7 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
         }
     }
 
-    @OnClick({R.id.ll_one, R.id.ll_two, R.id.ll_three})
+    @OnClick({R.id.ll_one, R.id.ll_two, R.id.ll_three,R.id.ll_four})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_one:
@@ -198,6 +200,10 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
 //                WebService.getGoodsListByTypeId(getActivity(), 3);
                 gotoGoodsScreenActivity(3);
                 break;
+            case R.id.ll_four:
+//                WebService.getGoodsListByTypeId(getActivity(), 3);
+                gotoGoodsScreenActivity(4);
+                break;
         }
     }
 
@@ -206,6 +212,8 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
         intent.putExtra("id", id);
         getActivity().startActivity(intent);
     }
+
+
 
     private class LocalImageHolderView implements Holder<String> {
         private ImageView imageView;

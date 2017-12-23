@@ -1,5 +1,6 @@
 package com.yitahutu.cn.Utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,18 +31,32 @@ public class TimeUtils {
 
         return date;
     }
+
     public static String getTime4(long time) {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMdd");
         String date = sDateFormat.format(time);
 
         return date;
     }
+
     public static String getTime5(long time) {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = sDateFormat.format(time);
 
         return date;
     }
+    public static String getTime6(long time) {
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sDateFormat.format(time);
+
+        return date;
+    }
+    public static String getTime7(long time) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
+        String str = formatter.format(time);
+        return str;
+    }
+
     public static int getTimeZoneRawOffset(String timeZoneId) {
         return TimeZone.getTimeZone(timeZoneId).getRawOffset();
     }
@@ -49,5 +64,17 @@ public class TimeUtils {
     public static long comepareDate(Date date, Date date2) {
         return date.getTime() - date2.getTime();
     }
+
+    public static long time2long(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date d = dateFormat.parse(time);
+            return d.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
 
 }

@@ -38,7 +38,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="40dp"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="44dp"
             android:background="@drawable/green_button_bg_shape"/>
         <Button
             android:id="@+id/button_withdraw"
@@ -50,7 +50,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:background="@drawable/main_gray_button_bg_shape"/>
     </LinearLayout>
 </LinearLayout>
