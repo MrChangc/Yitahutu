@@ -54,5 +54,6 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void recharge() {
+
     }
 }

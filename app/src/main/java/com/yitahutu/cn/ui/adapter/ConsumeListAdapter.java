@@ -23,10 +23,15 @@ import butterknife.ButterKnife;
 public class ConsumeListAdapter extends BaseAdapter {
     private Context mContext;
     private List<ConsumeModel> consumeModels;
-
-    public ConsumeListAdapter(Context context, List<ConsumeModel> consumeModels) {
+    private String add;
+    public ConsumeListAdapter(Context context, List<ConsumeModel> consumeModels,boolean isAdd) {
         this.mContext = context;
         this.consumeModels = consumeModels;
+        if (isAdd){
+            add = "+";
+        }else {
+            add = "-";
+        }
     }
 
     @Override
@@ -57,7 +62,7 @@ public class ConsumeListAdapter extends BaseAdapter {
         if (consumeModel!=null){
             viewHolder.textYear.setText(TimeUtils.getTime3(consumeModel.getCreatTime()));
             viewHolder.textTime.setText(TimeUtils.getTime4(consumeModel.getCreatTime()));
-            viewHolder.textPrice.setText("+"+consumeModel.getMoney());
+            viewHolder.textPrice.setText(add+consumeModel.getMoney());
             viewHolder.textDescribe.setText(consumeModel.getRecord());
         }
 

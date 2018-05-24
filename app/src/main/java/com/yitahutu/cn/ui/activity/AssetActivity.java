@@ -68,6 +68,7 @@ public class AssetActivity extends BaseActivity {
         List<TotalModel> totalModels =  TotalModel.listAll(TotalModel.class);
         if (totalModels.size()>0){
             TotalModel totalModel = totalModels.get(0);
+            textIncome.setText(totalModel.getYesteday()+"");
             textBalance.setText(totalModel.getWallet()+"");
             textInvestment.setText(totalModel.getAggregate()+"");
             textCommission.setText("0.0");

@@ -88,7 +88,6 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_mall, null);
         WebService.getGoodsList(getActivity());
-        images.clear();
         convenientBanner = (ConvenientBanner) rootView.findViewById(R.id.convenientBanner);
 //        convenientBanner.setOnItemClickListener(new OnItemClickListener() {
 //            @Override
@@ -114,8 +113,6 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
                 return true;
             }
         });
-        loadCarouselFigure();
-
         return rootView;
     }
 
@@ -134,6 +131,9 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
 
 
     private void loadCarouselFigure() {
+        if (images.size() <= 0) {
+            images.add("wdsdsds");
+        }
         //开始自动翻页
         convenientBanner.setPages(new CBViewHolderCreator() {
             @Override
@@ -185,7 +185,7 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
         }
     }
 
-    @OnClick({R.id.ll_one, R.id.ll_two, R.id.ll_three,R.id.ll_four})
+    @OnClick({R.id.ll_one, R.id.ll_two, R.id.ll_three, R.id.ll_four})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_one:
@@ -214,7 +214,6 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
     }
 
 
-
     private class LocalImageHolderView implements Holder<String> {
         private ImageView imageView;
 
@@ -228,12 +227,10 @@ public class MallFragment extends Fragment implements OnItemClickListener, Adapt
         @Override
         public void UpdateUI(Context context, int position, String data) {
 //            OkHttpGlideModule.w
-            if (images.size() <= 0) {
-                imageView.setImageResource(R.mipmap.defult_convenient_banner);
-                return;
-            }
+
             Picasso.with(getActivity())
                     .load(data)
+                    .error(getResources().getDrawable(R.mipmap.defult_convenient_banner))
                     .into(imageView);
         }
     }

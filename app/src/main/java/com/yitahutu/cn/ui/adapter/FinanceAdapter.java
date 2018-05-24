@@ -48,7 +48,7 @@ public class FinanceAdapter extends BaseAdapter {
         FinanceModel financeModel = financeModels.get(i);
         ViewHolder viewHolder = null;
         if (view == null){
-            view = View.inflate(mContext, R.layout.item_finance, null);
+            view = View.inflate(mContext, R.layout.item_finance_detail_list_copy, null);
             viewHolder = new ViewHolder(view,financeModel.getRate());
             view.setTag(viewHolder);
         }else {

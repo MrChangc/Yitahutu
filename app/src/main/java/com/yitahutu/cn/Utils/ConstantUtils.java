@@ -5,7 +5,7 @@ package com.yitahutu.cn.Utils;
  */
 public class ConstantUtils {
     public static final String baseUrl = "http://39.106.148.13:8080/jiu_niu_zhai";
-    public static final String default_token = "44f27dd5-fba5-45ba-8d68-fca1c7cc6b66";
+    public static final String default_token = "e6a51646-f84f-4628-b331-202826165cbd";
     public static final int version = 10025;
     public static  long time = System.currentTimeMillis();
     public static final int TYPE_NONE = -1;
@@ -23,6 +23,7 @@ public class ConstantUtils {
             "VfN8NcKEsCfqX9ejlq%2FX9WZQ0upPQAe5ZsKm5TtnZ%2Fv2hsq4Qt1nKNXzXyAY%2FmVTvnHynTV12jmgqv6uSLS6STs" +
             "0MfUqYZHD9HUA2U16lQFGjUH%2FiUVSpzkc1a%2BE7XcTxryIlxXSCkUnPesls%2FzN4Id1XQVA1DKHOnZiPM1TdAhoNR0H7l" +
             "rqdW7WgH0zMh2PYZlY4Mw%3D%3D&sign_type=RSA2×tamp=2017-12-18+10%3A31%3A30&version=1.0";
+    public static final String NUMBER ="{\"appid\":\"wxb4ba3c02aa476ea1\",\"partnerid\":\"1900006771\",\"package\":\"Sign=WXPay\",\"noncestr\":\"141a5f2aaf9d25faac231bfc0b75ab5c\",\"timestamp\":1514362993,\"prepayid\":\"wx201712271623134af2cab09c0654154956\",\"sign\":\"8B8D773A27C4C9843511DBA39C7975D0\"}}";
 //    39.106.148.13:8080
 //    192.168.1.166:8080
 }

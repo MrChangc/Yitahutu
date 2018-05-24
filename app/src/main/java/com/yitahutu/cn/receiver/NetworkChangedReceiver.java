@@ -16,23 +16,23 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
         int netWorkStates = PhoneUtils.getNetWorkStates(context);
         Log.e("netWorkStates",netWorkStates+"");
         switch (netWorkStates) {
-            case PhoneUtils.TYPE_NONE:
-                //断网了
-                PreferUtil.putNetWork(false);
-//                ToastUtil toastUtil = new ToastUtil(context, R.layout.view_toast,"亲，断网了!");
-//                toastUtil.show();
-                break;
-            case PhoneUtils.TYPE_MOBILE:
-                PreferUtil.putNetWork(true);
-                //打开了移动网络
-                break;
-            case PhoneUtils.TYPE_WIFI:
-                PreferUtil.putNetWork(true);
-                //打开了WIFI
-                break;
-
-            default:
-                break;
+//            case PhoneUtils.TYPE_NONE:
+//                //断网了
+//                PreferUtil.putNetWork(false);
+////                ToastUtil toastUtil = new ToastUtil(context, R.layout.view_toast,"亲，断网了!");
+////                toastUtil.show();
+//                break;
+//            case PhoneUtils.TYPE_MOBILE:
+//                PreferUtil.putNetWork(true);
+//                //打开了移动网络
+//                break;
+//            case PhoneUtils.TYPE_WIFI:
+//                PreferUtil.putNetWork(true);
+//                //打开了WIFI
+//                break;
+//
+//            default:
+//                break;
         }
     }
 }

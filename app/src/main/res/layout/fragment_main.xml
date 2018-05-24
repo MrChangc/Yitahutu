@@ -1,254 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background">
+    android:background="@color/color_background"
+    android:orientation="vertical">
+
     <LinearLayout
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:id="@+id/button_login"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/main_user_check"/>
+                    android:src="@mipmap/main_user_check" />
+
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="账号登录"/>
+                    android:layout_marginTop="5dp"
+                    android:text="账号登录"
+                    android:textColor="@color/black" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/button_register"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/main_user_check"/>
+                    android:src="@mipmap/main_user_check" />
+
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="注册账号"/>
+                    android:layout_marginTop="5dp"
+                    android:text="注册账号"
+                    android:textColor="@color/black" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/button_member"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/main_user_check"/>
+                    android:src="@mipmap/main_user_check" />
+
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="成为会员"/>
+                    android:layout_marginTop="5dp"
+                    android:text="成为会员"
+                    android:textColor="@color/black" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@mipmap/main_fragment_top_bg">
-    </LinearLayout>
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:layout_marginLeft="30dp"
-        android:orientation="horizontal"
         android:layout_marginTop="5dp"
+        android:background="@mipmap/main_fragment_top_bg"></LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/main_fragment_gift_box"/>
+            android:src="@mipmap/main_fragment_gift_box" />
+
         <TextView
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="好消息!邀请好友认购理财得佣金啦!"/>
+            android:layout_marginLeft="10dp"
+            android:text="好消息!邀请好友认购理财得佣金啦!"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_middle" />
 
     </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
         <LinearLayout
-            android:layout_marginLeft="15dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <LinearLayout
-                android:id="@+id/ll_shift_to"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="180dp"
-                android:layout_height="80dp"
-                android:background="@drawable/green_button_bg_shape">
-                <LinearLayout
-                    android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:textColor="@color/white"
-                        android:text="牧场领牛理财"
-                        android:textSize="@dimen/text_size_large"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/naiwei_mall" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_member"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/main_memeber" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:visibility="gone"
+                            android:id="@+id/iv_shengtai"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/shengtaimeiwei" />
+
+                        <ImageView
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/iv_yingyang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/yingyang" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/happy_pasture" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_finance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/qlichan11" />
+
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/iv_zhibo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/niuniuzhibo" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ll_sign"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:background="@color/title_back_ground"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
                     <TextView
+                        android:text="每日签到"
                         android:textColor="@color/white"
-                        android:layout_marginTop="5dp"
-                        android:text="立即转入"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_middle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="5dp"
-                    android:text="转入"
-                    android:textSize="@dimen/text_size_large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <Button
-                android:id="@+id/button_subscription"
-                android:text="立即认购"
-                android:textColor="@color/gray"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_large"
-                android:layout_marginLeft="20dp"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:background="@drawable/main_gray_button_bg_shape"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/ll_ramble"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="180dp"
-                android:layout_height="80dp"
-                android:background="@drawable/green_button_bg_shape">
+
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/ll_happy"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:background="@color/title_back_ground"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
                     <TextView
+                        android:text="邀请好友"
                         android:textColor="@color/white"
-                        android:text="生态新鲜牛乳"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:textColor="@color/white"
-                        android:layout_marginTop="5dp"
-                        android:text="进店逛逛"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_middle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="5dp"
-                    android:text="逛逛"
-                    android:textSize="@dimen/text_size_large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <Button
-                android:id="@+id/button_shop"
-                android:text="立即购买"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/text_size_large"
-                android:layout_marginLeft="20dp"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:background="@drawable/main_gray_button_bg_shape"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/ll_direct"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="180dp"
-                android:layout_height="80dp"
-                android:background="@drawable/green_button_bg_shape">
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/ll_pasture"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:background="@color/title_back_ground"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
                     <TextView
+                        android:text="积分牧场"
                         android:textColor="@color/white"
-                        android:text="牛牛的生活圈"
-                        android:textSize="@dimen/text_size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:textColor="@color/white"
-                        android:layout_marginTop="5dp"
-                        android:text="牛牛直播"
-                        android:textSize="@dimen/text_size_large"
+                        android:textSize="@dimen/text_size_middle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="5dp"
-                    android:text="直播"
-                    android:textSize="@dimen/text_size_large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
-            <Button
-                android:id="@+id/button_direct"
-                android:text="点击直播"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/text_size_large"
-                android:layout_marginLeft="20dp"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:background="@drawable/main_gray_button_bg_shape"/>
+            <ImageView
+                android:src="@mipmap/main_fragment_buttom"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

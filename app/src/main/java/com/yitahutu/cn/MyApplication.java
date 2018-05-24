@@ -14,18 +14,18 @@ import java.util.List;
  */
 public class MyApplication extends SugarApp {
     private static UserInfoModel userInfoModel;
-
+    public static boolean isBuyMemBer;
     @Override
     public void onCreate() {
         super.onCreate();
         PreferUtil.Init(this);
         GoodsModel goodsModel = new GoodsModel();
         int state = PhoneUtils.getNetWorkStates(getApplicationContext());
-        if (state == PhoneUtils.TYPE_MOBILE)
-            PreferUtil.putNetWork(false);
-        else{
-            PreferUtil.putNetWork(true);
-        }
+//        if (state == PhoneUtils.TYPE_MOBILE)
+//            PreferUtil.putNetWork(false);
+//        else{
+//            PreferUtil.putNetWork(true);
+//        }
     }
 
     public static UserInfoModel getUserInfoModel() {

@@ -15,6 +15,7 @@ import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.ui.activity.FinanceBalanceActivity;
+import com.yitahutu.cn.ui.activity.MallBalanceActivity;
 
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class GoodsScreenAdapter extends BaseAdapter {
         viewHolder.imageAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, FinanceBalanceActivity.class);
+                Intent intent = new Intent(mContext, MallBalanceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("goods",goodsModel);
                 intent.putExtras(bundle);

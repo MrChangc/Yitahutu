@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:visibility="gone"
             android:layout_margin="15dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -116,6 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"/>
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/ll_down_load"
             android:layout_margin="15dp"
             android:gravity="center_vertical"

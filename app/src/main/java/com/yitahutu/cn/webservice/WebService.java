@@ -3,6 +3,7 @@ package com.yitahutu.cn.webservice;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.yitahutu.cn.model.TotalModel;
 import com.yitahutu.cn.model.UserInfoModel;
 import com.yitahutu.cn.ui.View.QdLoadingDialog;
 import com.yitahutu.cn.ui.View.RefreshableView;
+import com.yitahutu.cn.ui.activity.AddressListActivity;
 import com.yitahutu.cn.ui.activity.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
@@ -61,7 +63,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -69,24 +71,21 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1){
+                            if (code == 1) {
                                 message = "手机号不能为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 2){
+                            } else if (code == 2) {
                                 message = "没有选择类型";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 3){
+                            } else if (code == 3) {
                                 message = "用户还没组册";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 4){
+                            } else if (code == 4) {
                                 message = "用户还没组册";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -109,7 +108,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -117,33 +116,28 @@ public class WebService {
                     public void onResponse(JSONObject response, int id) {
                         try {
                             int code = response.getInt("code");
-                            if (code == 1){
+                            if (code == 1) {
                                 message = "手机号不能为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 2){
+                            } else if (code == 2) {
                                 message = "密码不能为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 3){
+                            } else if (code == 3) {
                                 message = "验证码不能为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 4){
+                            } else if (code == 4) {
                                 message = "验证码不正确";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 5){
+                            } else if (code == 5) {
                                 message = "两次输入密码不一致";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "注册成功!";
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(intent);
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -192,11 +186,13 @@ public class WebService {
                         String message = "";
                         try {
                             int code = response.getInt("code");
-                            if (code == 1)
+                            if (code == 1) {
                                 message = "参数为空";
-                            else if (code == 300)
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
                                 message = "登录过期";
-                            else if (code == 200) {
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 200) {
                                 message = "登录成功";
                                 String data = response.getString("datas");
                                 UserInfoModel userInfoModel = new Gson().fromJson(data, UserInfoModel.class);
@@ -204,13 +200,14 @@ public class WebService {
                                 EventBus.getDefault().post(new Event.UserInfoEvent());
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
     public static void getUserInfo(final Context mContext, final SuccessCallBack successCallBack) {
         String token = null;
         if (PreferUtil.isLogin())
@@ -236,12 +233,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "登录成功";
                                 String data = response.getString("datas");
                                 UserInfoModel userInfoModel = new Gson().fromJson(data, UserInfoModel.class);
@@ -251,7 +246,7 @@ public class WebService {
                                 EventBus.getDefault().post(new Event.UserInfoEvent());
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -275,7 +270,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -286,12 +281,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
@@ -302,7 +295,55 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    public static void getGoodsList(final Context mContext, String type, final SuccessCallBack successCallBack) {
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/goods/list")
+                .addParams("token", token)
+                .addParams("typeId", type)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "网络异常";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 200) {
+                                message = "获取商品成功";
+                                String data = response.getString("datas");
+                                List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
+                                GoodsModel.deleteAll(GoodsModel.class);
+                                GoodsModel.saveInTx(goodsModels);
+                                successCallBack.callBackToObject(goodsModels);
+                            }
+                        } catch (JSONException e) {
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -327,7 +368,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -338,19 +379,17 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
                                 EventBus.getDefault().post(new Event.GoodsByRecommendEvent(goodsModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -389,7 +428,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         if (refreshableView != null)
                             refreshableView.finishRefreshing();
@@ -402,12 +441,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
@@ -415,7 +452,7 @@ public class WebService {
                                     EventBus.getDefault().post(new Event.GoodsBySearch(goodsModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -443,7 +480,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -454,12 +491,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
@@ -467,7 +502,7 @@ public class WebService {
                                     EventBus.getDefault().post(new Event.GoodsByScreenEvent(goodsModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -494,7 +529,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -505,12 +540,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
@@ -518,7 +551,7 @@ public class WebService {
                                     EventBus.getDefault().post(new Event.GoodsByScreenEvent(goodsModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -545,7 +578,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -556,12 +589,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
@@ -569,7 +600,7 @@ public class WebService {
                                     EventBus.getDefault().post(new Event.GoodsByScreenEvent(goodsModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -596,7 +627,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                         refreshableView.finishRefreshing();
@@ -609,12 +640,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取评论成功";
                                 String data = response.getString("datas");
                                 EvaluateAll evaluateAll = GsonUtils.parserJsonObjectToEvaluateAll(data);
@@ -626,7 +655,7 @@ public class WebService {
                                     EventBus.getDefault().post(new Event.EvaluateEvent(evaluateModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -655,7 +684,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                         refreshableView.finishRefreshing();
@@ -668,12 +697,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取评论成功";
                                 String data = response.getString("datas");
                                 EvaluateAll evaluateAll = GsonUtils.parserJsonObjectToEvaluateAll(data);
@@ -685,7 +712,7 @@ public class WebService {
                                     EventBus.getDefault().post(new Event.EvaluateEvent(evaluateModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -696,6 +723,7 @@ public class WebService {
     }
 
     public static void getRecommendGoodsList(final Context mContext, final List<String> images) {
+        images.clear();
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -711,7 +739,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -722,12 +750,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 List<GoodsModel> goodsModels = GsonUtils.parserJsonArrayToGoodsModel(data, GoodsModel.class);
@@ -741,7 +767,7 @@ public class WebService {
                                     EventBus.getDefault().post(new Event.RecommendGoodsEvent(goodsModels));
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                         }
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
@@ -765,7 +791,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -776,12 +802,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "获取商品成功";
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -790,7 +814,7 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -816,7 +840,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -827,19 +851,17 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     message = data;
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -863,7 +885,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         refreshableView.finishRefreshing();
                     }
@@ -875,12 +897,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<FinanceModel> financeModels = GsonUtils.parserJsonArrayToFinanceModel(data, FinanceModel.class);
@@ -890,7 +910,7 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -899,7 +919,11 @@ public class WebService {
                 });
     }
 
-    public static void getCartList(final int state, final Context mContext, final RefreshableView refreshableView) {
+    public static void getCartList(final int state, final Context mContext, final SuccessCallBack callBack) {
+        String states = "";
+        if (state != -2) {
+            states = states + state;
+        }
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -908,7 +932,7 @@ public class WebService {
         OkHttpUtils
                 .post()
                 .url(ConstantUtils.baseUrl + "/cart/list")
-                .addParams("state", state + "")
+                .addParams("state", states)
                 .addParams("token", token)
                 .build()
                 .execute(new JsonObjectCallBack() {
@@ -916,9 +940,8 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                        refreshableView.finishRefreshing();
                     }
 
                     @Override
@@ -928,26 +951,25 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<CartListModel> financeModels = GsonUtils.parserJsonArrayToCartList(data, CartListModel.class);
                                     CartListModel.deleteAll(CartListModel.class);
                                     CartListModel.saveInTx(financeModels);
-                                    EventBus.getDefault().post(new Event.CartListEvent(financeModels, state));
+                                    callBack.callBackToObject(financeModels);
+                                    return;
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        refreshableView.finishRefreshing();
+                        callBack.callBack();
                     }
                 });
     }
@@ -970,7 +992,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -982,12 +1004,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
                                 message = "删除成功";
@@ -996,7 +1016,7 @@ public class WebService {
                                 mLoadingDialog.dismiss();
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1039,7 +1059,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1051,20 +1071,19 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
                                 message = "加入购物车成功!";
 //                                }
                                 EventBus.getDefault().post(new Event.AddGoodsToCart());
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1073,7 +1092,7 @@ public class WebService {
                 });
     }
 
-    public static void buyGoods(String addressId, String id, String num, String way, final Context mContext) {
+    public static void buyGoods(String addressId, String id, String num, final String way, final Context mContext, final SuccessCallBack callBack) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -1094,7 +1113,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1106,22 +1125,24 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
-//                                String data = response.getString("datas");
-//                                if (data != null && !TextUtils.isEmpty(data)) {
-                                message = "购买成功!";
-//                                }
-                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 200) {
+                                if (way.equals("2")) {
+                                    String data = response.getString("datas");
+                                    if (data != null && !TextUtils.isEmpty(data)) {
+                                        callBack.callBackToObject(data);
+                                    }
+                                } else if (way.equals("0")) {
+                                    callBack.callBack();
+                                }
+//                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
                             } else if (code == 2) {
                                 message = "支付失败";
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1150,7 +1171,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1162,12 +1183,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
                                 message = "购买成功!";
@@ -1175,7 +1194,7 @@ public class WebService {
                                 EventBus.getDefault().post(new Event.BuyGoodsEvent());
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1201,7 +1220,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
 
@@ -1212,19 +1231,17 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
                                 message = "退款成功";
 //                                }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1232,7 +1249,7 @@ public class WebService {
                 });
     }
 
-    public static void financeAdopt(String way, String id, String number, final Context mContext) {
+    public static void financeAdopt(final String way, String id, String number, final Context mContext, final SuccessCallBack callBack) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -1244,39 +1261,43 @@ public class WebService {
                 .url(ConstantUtils.baseUrl + "/finance/adopt")
                 .addParams("financeId", id)
                 .addParams("token", token)
-                .addParams("number", number)
-                .addParams("way", "0")
+                .addParams("nummber", number)
+                .addParams("way", way)
                 .build()
                 .execute(new JsonObjectCallBack() {
                     String message = "";
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
 
                     @Override
                     public void onResponse(JSONObject response, int id) {
+                        MyApplication.isBuyMemBer = false;
                         try {
                             int code = response.getInt("code");
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
-//                                String data = response.getString("datas");
-//                                if (data != null && !TextUtils.isEmpty(data)) {
-                                message = "领养成功";
-//                                }
+                            } else if (code == 200) {
+                                if (way.equals("2")) {
+                                    String data = response.getString("datas");
+                                    if (data != null && !TextUtils.isEmpty(data)) {
+                                        callBack.callBackToObject(data);
+                                    }
+                                } else if (way.equals("0")) {
+                                    callBack.callBack();
+                                }
+//                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1285,7 +1306,7 @@ public class WebService {
                 });
     }
 
-    public static void getAddressList(final Context mContext) {
+    public static void getAddressList(final Context mContext, final SuccessCallBack callBack) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -1302,7 +1323,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1314,12 +1335,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<AddressModel> addressModels = GsonUtils.parserJsonArrayToAddress(data, AddressModel.class);
@@ -1331,14 +1350,12 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
                         mLoadingDialog.dismiss();
-                        Activity activity = (Activity) mContext;
-                        Intent intent = new Intent(activity, MainActivity.class);
-                        activity.startActivity(intent);
+                        callBack.callBack();
                     }
                 });
     }
@@ -1360,7 +1377,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1385,7 +1402,7 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                         }
                         mLoadingDialog.dismiss();
@@ -1413,7 +1430,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1425,12 +1442,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<FinanceDetailModel> addressModels = GsonUtils.parserJsonArrayToFinanceDetailModel(data, FinanceDetailModel.class);
@@ -1443,7 +1458,7 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1470,7 +1485,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1482,12 +1497,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<RefundRecordModel> addressModels = GsonUtils.parserJsonArrayToRefundRecordModel(data, RefundRecordModel.class);
@@ -1500,7 +1513,7 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1530,7 +1543,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1542,16 +1555,14 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 message = "修改成功";
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1560,8 +1571,8 @@ public class WebService {
                 });
     }
 
-    public static void getConsumeList(final Context mContext, String state, final RefreshableView refreshableView) {
-        loading(mContext);
+    public static void getConsumeList(final Context mContext, String state, final SuccessCallBack callBack, final ErrorCallBack errorBack) {
+//        loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
             token = PreferUtil.getToken(PreferUtil.getUserName());
@@ -1578,10 +1589,10 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                        mLoadingDialog.dismiss();
-                        refreshableView.finishRefreshing();
+//                        mLoadingDialog.dismiss();
+                        errorBack.errorCallBack();
                     }
 
                     @Override
@@ -1591,30 +1602,24 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     List<ConsumeModel> addressModels = GsonUtils.parserJsonArrayToConsumeModel(data, ConsumeModel.class);
-                                    if (addressModels.size() > 0) {
-                                        ConsumeModel.deleteAll(ConsumeModel.class);
-                                        ConsumeModel.saveInTx(addressModels);
-                                        EventBus.getDefault().post(new Event.ConsumeModelEvent(addressModels));
-                                    }
-
+                                    ConsumeModel.deleteAll(ConsumeModel.class);
+                                    ConsumeModel.saveInTx(addressModels);
+                                    callBack.callBackToObject(addressModels);
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        mLoadingDialog.dismiss();
-                        refreshableView.finishRefreshing();
+//                        mLoadingDialog.dismiss();
                     }
                 });
     }
@@ -1636,7 +1641,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1648,12 +1653,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
                                     TotalModel totalModel = GsonUtils.parserJsonObjectToTotalModel(data);
@@ -1665,7 +1668,7 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1691,7 +1694,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -1716,7 +1719,7 @@ public class WebService {
                                 }
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                         }
                         mLoadingDialog.dismiss();
@@ -1728,12 +1731,11 @@ public class WebService {
     }
 
     public static void updateAddress(final Context mContext,
-                                     String id,
                                      String name,
                                      String phone,
                                      String region,
                                      String detailAddress,
-                                     String zipCode) {
+                                     String zipCode, final SuccessCallBack callBack) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -1742,9 +1744,8 @@ public class WebService {
             token = ConstantUtils.default_token;
         OkHttpUtils
                 .post()
-                .url(ConstantUtils.baseUrl + "/address/addressList")
+                .url(ConstantUtils.baseUrl + "/address/insert")
                 .addParams("token", token)
-                .addParams("id", id)
                 .addParams("name", name)
                 .addParams("phone", phone)
                 .addParams("region", region)
@@ -1756,7 +1757,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
 
@@ -1769,25 +1770,15 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
-//                                String data = response.getString("datas");
-//                                if (data != null && !TextUtils.isEmpty(data)) {
-//                                    List<AddressModel> addressModels = GsonUtils.parserJsonArrayToAddress(data, AddressModel.class);
-//                                    if (addressModels.size()>0){
-//                                        AddressModel.deleteAll(AddressModel.class);
-//                                        AddressModel.saveInTx(addressModels);
-//                                    }
-//
-//                                }
+                            } else if (code == 200) {
                                 message = "修改成功!";
+                                WebService.getAddressList(mContext, callBack);
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1824,7 +1815,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
 
@@ -1841,10 +1832,10 @@ public class WebService {
                             }
                             message = "修改成功!";
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
                 });
@@ -1869,7 +1860,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
 
@@ -1882,12 +1873,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
 //
                                 String data = response.getString("datas");
                                 if (data != null && !TextUtils.isEmpty(data)) {
@@ -1898,7 +1887,7 @@ public class WebService {
                                 message = "修改成功!";
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -1930,7 +1919,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
 
@@ -1955,7 +1944,7 @@ public class WebService {
                                 successCallBack.callBackToObject(data);
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                         }
                         mLoadingDialog.dismiss();
@@ -1963,7 +1952,7 @@ public class WebService {
                 });
     }
 
-    public static void buyVip(String num, String way, final Context mContext, final SuccessCallBack successCallBack) {
+    public static void buyVip(String num, final String way, final Context mContext, final SuccessCallBack callBack) {
         loading(mContext);
         String token = null;
         if (PreferUtil.isLogin())
@@ -1982,35 +1971,37 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
 
                     @Override
                     public void onResponse(JSONObject response, int id) {
+                        MyApplication.isBuyMemBer = true;
                         try {
                             int code = response.getInt("code");
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
-//                                String data = response.getString("datas");
-//                                if (data != null && !TextUtils.isEmpty(data)) {
-                                message = "购买成功!";
-                                successCallBack.callBack();
-//                                }
-                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 200) {
+                                if (way.equals("2")) {
+                                    String data = response.getString("datas");
+                                    if (data != null && !TextUtils.isEmpty(data)) {
+                                        callBack.callBackToObject(data);
+                                    }
+                                } else if (way.equals("0")) {
+                                    callBack.callBack();
+                                }
+//                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
                             } else if (code == 2) {
                                 message = "支付失败";
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }
@@ -2018,6 +2009,7 @@ public class WebService {
                     }
                 });
     }
+
     public static void alipayStatic(String state, String orderNum, final Context mContext, final SuccessCallBack successCallBack) {
         loading(mContext);
         String token = null;
@@ -2037,7 +2029,7 @@ public class WebService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        message = "请求错误";
+                        message = "网络异常";
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         mLoadingDialog.dismiss();
                     }
@@ -2049,12 +2041,10 @@ public class WebService {
                             if (code == 1) {
                                 message = "参数为空";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 300){
+                            } else if (code == 300) {
                                 message = "登录过期";
                                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                            }
-                            else if (code == 200) {
+                            } else if (code == 200) {
 //                                String data = response.getString("datas");
 //                                if (data != null && !TextUtils.isEmpty(data)) {
                                 message = "购买成功!";
@@ -2065,7 +2055,258 @@ public class WebService {
                                 message = "支付失败";
                             }
                         } catch (JSONException e) {
-                            message = "请求错误";
+                            message = "网络异常";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void getWeixin(final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
+        OkHttpUtils
+                .post()
+                .url("http://192.168.1.107:8080/jiu_niu_zhai" + "/user/weixin")
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "网络异常";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 200) {
+                                String data = response.getString("datas");
+                                successCallBack.callBackToObject(data);
+                            } else if (code == 2) {
+                                message = "支付失败";
+                            }
+                        } catch (JSONException e) {
+                            message = "网络异常";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void getWanYun(final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/user/weixin")
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "网络异常";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 200) {
+                                String data = response.getString("datas");
+                                successCallBack.callBackToObject(data);
+                            } else if (code == 2) {
+                                message = "支付失败";
+                            }
+                        } catch (JSONException e) {
+                            message = "网络异常";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void evaluationInsert(String goodsId, String carId, String grade, String comment, final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/evaluation/insert")
+                .addParams("token", token)
+                .addParams("goodsId", goodsId)
+                .addParams("cartId", carId)
+                .addParams("grade", grade)
+                .addParams("comment", comment)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "网络异常";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 200) {
+//                                String data = response.getString("datas");
+//                                if (data != null && !TextUtils.isEmpty(data)) {
+                                message = "购买成功!";
+                                successCallBack.callBackToObject(message);
+//                                }
+                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 2) {
+                                message = "支付失败";
+                            }
+                        } catch (JSONException e) {
+                            message = "网络异常";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void userRecharge(String num, final String way, final Context mContext, final SuccessCallBack callBack) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/user/recharge")
+                .addParams("token", token)
+                .addParams("money", num)
+                .addParams("way", way)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "网络异常";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 200) {
+                                if (way.equals("2")) {
+                                    String data = response.getString("datas");
+                                    if (data != null && !TextUtils.isEmpty(data)) {
+                                        callBack.callBackToObject(data);
+                                    }
+                                } else if (way.equals("3")) {
+                                    callBack.callBack();
+                                }
+//                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 2) {
+                                message = "支付失败";
+                            }
+                        } catch (JSONException e) {
+                            message = "网络异常";
+                            e.printStackTrace();
+                            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        }
+                        mLoadingDialog.dismiss();
+                    }
+                });
+    }
+
+    public static void secondLevel(String comment, final Context mContext, final SuccessCallBack successCallBack) {
+        loading(mContext);
+        String token = null;
+        if (PreferUtil.isLogin())
+            token = PreferUtil.getToken(PreferUtil.getUserName());
+        else
+            token = ConstantUtils.default_token;
+        OkHttpUtils
+                .post()
+                .url(ConstantUtils.baseUrl + "/secondLevel/add")
+                .addParams("token", token)
+                .addParams("comment", comment)
+                .build()
+                .execute(new JsonObjectCallBack() {
+                    String message = "";
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        message = "网络异常";
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        mLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response, int id) {
+                        try {
+                            int code = response.getInt("code");
+                            if (code == 1) {
+                                message = "参数为空";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 300) {
+                                message = "登录过期";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            } else if (code == 200) {
+//                                String data = response.getString("datas");
+//                                if (data != null && !TextUtils.isEmpty(data)) {
+                                message = "反馈成功!";
+                                successCallBack.callBack();
+//                                }
+                                EventBus.getDefault().post(new Event.BuyGoodsEvent());
+                            } else if (code == 2) {
+                                message = "反馈失败";
+                                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            message = "网络异常";
                             e.printStackTrace();
                             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                         }

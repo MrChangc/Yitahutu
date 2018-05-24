@@ -56,19 +56,22 @@
            android:layout_height="60dp">
            <TextView
                android:layout_weight="1"
-               android:textSize="@dimen/text_size_xlarge"
+               android:textSize="@dimen/text_size_large"
                android:text="1个月10元"
                android:textColor="@color/black"
                android:layout_width="match_parent"
                android:layout_height="wrap_content" />
            <LinearLayout
                android:id="@+id/ll_button1"
-               android:padding="5dp"
+               android:paddingLeft="10dp"
+               android:paddingRight="10dp"
+               android:paddingTop="3dp"
+               android:paddingBottom="3dp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:background="@drawable/green_button_member_shape">
                <TextView
-                   android:textSize="@dimen/text_size_xlarge"
+                   android:textSize="@dimen/text_size_small"
                    android:text="开通"
                    android:layout_marginLeft="10dp"
                    android:layout_marginRight="10dp"
@@ -86,19 +89,22 @@
            android:layout_height="60dp">
            <TextView
                android:layout_weight="1"
-               android:textSize="@dimen/text_size_xlarge"
+               android:textSize="@dimen/text_size_large"
                android:text="3个月20元"
                android:textColor="@color/black"
                android:layout_width="match_parent"
                android:layout_height="wrap_content" />
            <LinearLayout
                android:id="@+id/ll_button2"
-               android:padding="5dp"
+               android:paddingLeft="10dp"
+               android:paddingRight="10dp"
+               android:paddingTop="3dp"
+               android:paddingBottom="3dp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:background="@drawable/green_button_member_shape">
                <TextView
-                   android:textSize="@dimen/text_size_xlarge"
+                   android:textSize="@dimen/text_size_middle"
                    android:text="开通"
                    android:layout_marginLeft="10dp"
                    android:layout_marginRight="10dp"
@@ -116,19 +122,22 @@
            android:layout_height="60dp">
            <TextView
                android:layout_weight="1"
-               android:textSize="@dimen/text_size_xlarge"
+               android:textSize="@dimen/text_size_large"
                android:text="6个月30元"
                android:textColor="@color/black"
                android:layout_width="match_parent"
                android:layout_height="wrap_content" />
            <LinearLayout
                android:id="@+id/ll_button3"
-               android:padding="5dp"
+               android:paddingLeft="10dp"
+               android:paddingRight="10dp"
+               android:paddingTop="3dp"
+               android:paddingBottom="3dp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:background="@drawable/green_button_member_shape">
                <TextView
-                   android:textSize="@dimen/text_size_xlarge"
+                   android:textSize="@dimen/text_size_middle"
                    android:text="开通"
                    android:layout_marginLeft="10dp"
                    android:layout_marginRight="10dp"
@@ -146,19 +155,22 @@
            android:layout_height="60dp">
            <TextView
                android:layout_weight="1"
-               android:textSize="@dimen/text_size_xlarge"
+               android:textSize="@dimen/text_size_large"
                android:text="12个月50元"
                android:textColor="@color/black"
                android:layout_width="match_parent"
                android:layout_height="wrap_content" />
            <LinearLayout
                android:id="@+id/ll_button4"
-               android:padding="5dp"
+               android:paddingLeft="10dp"
+               android:paddingRight="10dp"
+               android:paddingTop="3dp"
+               android:paddingBottom="3dp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:background="@drawable/green_button_member_shape">
                <TextView
-                   android:textSize="@dimen/text_size_xlarge"
+                   android:textSize="@dimen/text_size_middle"
                    android:text="开通"
                    android:layout_marginLeft="10dp"
                    android:layout_marginRight="10dp"

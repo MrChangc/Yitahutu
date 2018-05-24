@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="title"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_xxlarge"/>
+            android:textSize="@dimen/text_size_xlarge"/>
         <RelativeLayout
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_xxlarge"/>
+                android:textSize="@dimen/text_size_xlarge"/>
                 />
         </RelativeLayout>
 

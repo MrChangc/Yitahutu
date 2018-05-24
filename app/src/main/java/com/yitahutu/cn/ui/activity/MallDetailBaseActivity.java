@@ -1,14 +1,17 @@
 package com.yitahutu.cn.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.ui.adapter.MyFragmentPagerAdapter;
 import com.yitahutu.cn.ui.fragment.MallDetailBaseFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +51,17 @@ public class MallDetailBaseActivity extends BaseActivity {
         stringList.add("待发货");
         stringList.add("待收货");
         stringList.add("待评价");
-        for (int i = 0;i<stringList.size();i++){
+        for (int i = 0; i < stringList.size(); i++) {
             tabLayout.addTab(tabLayout.newTab().setText(stringList.get(i)));
-            MallDetailBaseFragment mallDetailBaseFragment = MallDetailBaseFragment.newInstance(i);
-            fragments.add(mallDetailBaseFragment);
+            if (i == 0){
+                MallDetailBaseFragment mallDetailBaseFragment = MallDetailBaseFragment.newInstance(-2);
+                fragments.add(mallDetailBaseFragment);
+                tabLayout.addTab(tabLayout.newTab().setText(stringList.get(i)));
+            }else {
+                MallDetailBaseFragment mallDetailBaseFragment = MallDetailBaseFragment.newInstance(i);
+                fragments.add(mallDetailBaseFragment);
+                tabLayout.addTab(tabLayout.newTab().setText(stringList.get(i)));
+            }
         }
         MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments, stringList);
         viewPageMallDetail.setAdapter(myFragmentPagerAdapter);

@@ -14,6 +14,7 @@ import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.CartListModel;
 import com.yitahutu.cn.ui.View.RefreshableView;
 import com.yitahutu.cn.ui.adapter.CartListAdpater;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,7 +31,7 @@ import butterknife.OnClick;
 /**
  * Created by Administrator on 2017\10\19 0019.
  */
-public class CartListActivity extends BaseActivity {
+public class CartListActivity extends BaseActivity implements SuccessCallBack {
     @BindView(R.id.list_cart_goods)
     ListView listCartGoods;
     @BindView(R.id.text_total)
@@ -46,7 +47,7 @@ public class CartListActivity extends BaseActivity {
 
     @Override
     void setRightIconListener() {
-        WebService.getCartList(0, mContext,refreshView);
+        WebService.getCartList(0, mContext,this);
     }
 
     @Override
@@ -58,12 +59,12 @@ public class CartListActivity extends BaseActivity {
         refreshView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                WebService.getCartList(0, mContext,refreshView);
+                WebService.getCartList(0, mContext,CartListActivity.this);
             }
         },getTaskId());
         initList();
         setRightIconVisibility(true);
-        WebService.getCartList(0, mContext,refreshView);
+        WebService.getCartList(0, mContext,this);
     }
 
     private void initList() {
@@ -78,6 +79,7 @@ public class CartListActivity extends BaseActivity {
             textNoData.setVisibility(View.VISIBLE);
             listCartGoods.setVisibility(View.GONE);
         }
+        mContext.getResources().getColor(R.color.title_back_ground);
     }
 
     @Override
@@ -88,16 +90,7 @@ public class CartListActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(Event.CartListEvent listEvent) {
-        cartListModels.clear();
-        cartListModels.addAll(listEvent.financeModels);
-        listAdpater.notifyDataSetChanged();
-        if (cartListModels.size() > 0) {
-            textNoData.setVisibility(View.GONE);
-            listCartGoods.setVisibility(View.VISIBLE);
-        } else {
-            textNoData.setVisibility(View.VISIBLE);
-            listCartGoods.setVisibility(View.GONE);
-        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -136,4 +129,25 @@ public class CartListActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void callBack() {
+        refreshView.finishRefreshing();
+    }
+
+    @Override
+    public void callBackToObject(Object o) {
+        List<CartListModel> models = (List<CartListModel>) o;
+        cartListModels.clear();
+        cartListModels.addAll(models);
+        listAdpater.notifyDataSetChanged();
+        if (cartListModels.size() > 0) {
+            textNoData.setVisibility(View.GONE);
+            listCartGoods.setVisibility(View.VISIBLE);
+        } else {
+            textNoData.setVisibility(View.VISIBLE);
+            listCartGoods.setVisibility(View.GONE);
+        }
+        refreshView.finishRefreshing();
+
+    }
 }

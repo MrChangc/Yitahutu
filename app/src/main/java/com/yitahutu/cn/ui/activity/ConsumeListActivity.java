@@ -1,5 +1,6 @@
 package com.yitahutu.cn.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,8 +12,11 @@ import android.widget.TextView;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.Event;
 import com.yitahutu.cn.model.ConsumeModel;
+import com.yitahutu.cn.ui.View.QdLoadingDialog;
 import com.yitahutu.cn.ui.View.RefreshableView;
 import com.yitahutu.cn.ui.adapter.ConsumeListAdapter;
+import com.yitahutu.cn.webservice.ErrorCallBack;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,7 +32,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2017\11\13 0013.
  */
-public class ConsumeListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class ConsumeListActivity extends BaseActivity implements AdapterView.OnItemClickListener, SuccessCallBack, ErrorCallBack {
     @BindView(R.id.list_consume)
     ListView listConsume;
     @BindView(R.id.text_no_data)
@@ -37,7 +41,15 @@ public class ConsumeListActivity extends BaseActivity implements AdapterView.OnI
     RefreshableView refreshView;
     private List<ConsumeModel> consumeModels = new ArrayList<>();
     private ConsumeListAdapter consumeListAdapter;
-
+    private int type;
+    private QdLoadingDialog mLoadingDialog;
+    private  void loading(Context mContext) {
+        if (mLoadingDialog == null || !mLoadingDialog.isShowing()) {
+            mLoadingDialog = new QdLoadingDialog(mContext, "加载中...");
+            mLoadingDialog.setCancelable(true);
+            mLoadingDialog.show();
+        }
+    }
     @Override
     void setRightIconListener() {
 
@@ -46,28 +58,28 @@ public class ConsumeListActivity extends BaseActivity implements AdapterView.OnI
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         String title = "全部";
-        final int type = getIntent().getIntExtra("type", -1);
-        if (type == 6)
+        type = getIntent().getIntExtra("type", -1);
+        if (type == 2)
             title = "充值/退款";
         setContentView(title, R.layout.activity_consum_list);
         ButterKnife.bind(this);
         refreshView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                WebService.getConsumeList(mContext, type + "",refreshView);
+                WebService.getConsumeList(mContext, type + "", ConsumeListActivity.this, ConsumeListActivity.this);
             }
-        },getTaskId());
+        }, getTaskId());
         initAdapter();
         listConsume.setOnItemClickListener(this);
-        WebService.getConsumeList(mContext, type + "",refreshView);
+        loading(mContext);
+        WebService.getConsumeList(mContext, type + "", this, this);
     }
 
     private void initAdapter() {
         List<ConsumeModel> models = ConsumeModel.listAll(ConsumeModel.class);
         consumeModels.addAll(models);
-        consumeListAdapter = new ConsumeListAdapter(mContext, consumeModels);
+        consumeListAdapter = new ConsumeListAdapter(mContext, consumeModels, type!=6);
         listConsume.setAdapter(consumeListAdapter);
         setListVisibility();
     }
@@ -75,16 +87,15 @@ public class ConsumeListActivity extends BaseActivity implements AdapterView.OnI
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(Event.ConsumeModelEvent consumeModelEvent) {
-        consumeModels.clear();
-        consumeModels.addAll(consumeModelEvent.financeModels);
-        consumeListAdapter.notifyDataSetChanged();
-        setListVisibility();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void refresh(Event.ConsumeModelEvent consumeModelEvent) {
+//        consumeModels.clear();
+//        consumeModels.addAll(consumeModelEvent.financeModels);
+//        consumeListAdapter.notifyDataSetChanged();
+//        setListVisibility();
+//    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -98,11 +109,33 @@ public class ConsumeListActivity extends BaseActivity implements AdapterView.OnI
 
     private void setListVisibility() {
         if (consumeModels.size() > 0) {
-            refreshView.setVisibility(View.VISIBLE);
+            listConsume.setVisibility(View.VISIBLE);
             textNoData.setVisibility(View.GONE);
         } else {
-            refreshView.setVisibility(View.GONE);
+            listConsume.setVisibility(View.GONE);
             textNoData.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void callBack() {
+
+    }
+
+    @Override
+    public void callBackToObject(Object o) {
+        List<ConsumeModel> models = (List<ConsumeModel>) o;
+        consumeModels.clear();
+        consumeModels.addAll(models);
+        consumeListAdapter.notifyDataSetChanged();
+        setListVisibility();
+        refreshView.finishRefreshing();
+        mLoadingDialog.dismiss();
+    }
+
+    @Override
+    public void errorCallBack() {
+        refreshView.finishRefreshing();
+        mLoadingDialog.dismiss();
     }
 }

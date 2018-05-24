@@ -52,9 +52,7 @@ public class ShoppingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_mall_detail_all:
-                Intent intent = new Intent(mContext,ConsumeListActivity.class);
-                intent.putExtra("type",6);
-                startActivity(intent);
+                gotoCartActivity(0);
                 break;
             case R.id.ll_mall_detail_obligation:
                 gotoCartActivity(1);

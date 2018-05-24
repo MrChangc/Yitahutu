@@ -71,7 +71,7 @@ public class MemberActivity extends BaseActivity {
             tvMemberData.setText(date + "到期");
             ivImage.setImageResource(R.mipmap.member_vip);
         }
-        Picasso.with(this).load(userInfoModel.getUrl()).error(getResources().getDrawable(R.mipmap.member_head)).into(imageHead);
+//        Picasso.with(this).load(userInfoModel.getUrl()).error(getResources().getDrawable(R.mipmap.member_head)).into(imageHead);
     }
 
     @OnClick({R.id.ll_button1, R.id.ll_button2, R.id.ll_button3, R.id.ll_button4})
@@ -97,8 +97,8 @@ public class MemberActivity extends BaseActivity {
 //        if (MyApplication.getUserInfoModel() != null) {
         final PaymentDialog paymentDialog = new PaymentDialog(mContext, new PaymentDialog.BalanceOnClick() {
             @Override
-            public void onBalance() {
-                WebService.buyVip(num + "", "0", MemberActivity.this, new SuccessCallBack() {
+            public void onBalance(String type) {
+                WebService.buyVip(num + "", type, MemberActivity.this, new SuccessCallBack() {
                     @Override
                     public void callBack() {
                         WebService.getUserInfo(MemberActivity.this, new SuccessCallBack() {

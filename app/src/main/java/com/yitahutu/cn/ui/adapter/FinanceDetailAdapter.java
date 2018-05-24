@@ -58,7 +58,7 @@ public class FinanceDetailAdapter extends BaseAdapter {
             viewHolder.textRate.setText(financeDetailModel.getRate()+"");
             viewHolder.textUnivalent.setText(financeDetailModel.getPrice()+"");
             viewHolder.textTerm.setText(financeDetailModel.getCycle()+"");
-            viewHolder.textName.setText(financeDetailModel.getSketch());
+            viewHolder.textName.setText(financeDetailModel.getHeadline());
         }
         return view;
     }

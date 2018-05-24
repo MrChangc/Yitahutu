@@ -12,13 +12,13 @@ import com.yitahutu.cn.R;
 /**
  * Created by Administrator on 2017\10\11 0011.
  */
-public class AppStartActivity extends Activity{
-    private Handler handler = new Handler(){
+public class AppStartActivity extends Activity {
+    private Handler handler = new Handler() {
         @Override
         public void dispatchMessage(Message msg) {
             super.dispatchMessage(msg);
-            if (msg.what == 1){
-                Intent intent = new Intent(AppStartActivity.this,MainActivity.class);
+            if (msg.what == 1) {
+                Intent intent = new Intent(AppStartActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         }
@@ -28,7 +28,7 @@ public class AppStartActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_start);
-        handler.sendEmptyMessageDelayed(1,2000);
+        handler.sendEmptyMessageDelayed(1, 2000);
     }
 
     @Override

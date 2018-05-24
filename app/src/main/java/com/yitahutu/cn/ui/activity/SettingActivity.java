@@ -50,6 +50,8 @@ public class SettingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_help:
+                Intent intent = new Intent(mContext,SecondLevelActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_user_info:
                 Intent intent1 = new Intent(mContext,UserInfoActivity.class);
@@ -61,8 +63,8 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.ll_back_out:
                 PreferUtil.putLogin(false);
-                Intent intent = new Intent(mContext,UserLoginActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(mContext,UserLoginActivity.class);
+                startActivity(intent2);
                 UserInfoModel.deleteAll(UserInfoModel.class);
                 MyApplication.setUserInfoModel(null);
                 break;

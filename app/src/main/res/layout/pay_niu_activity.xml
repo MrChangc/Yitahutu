@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="50dp"
+    >
+    <com.yitahutu.cn.ui.View.PayPsdInputView
+        android:layout_marginTop="80dp"
+        android:id="@+id/psd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:maxCount="6"
+        app:rectAngle="5dp"
+        app:psdType="weChat"
+        />
+    <LinearLayout
+        android:id="@+id/ll_confirm"
+        android:background="@drawable/green_button_bg_shape"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" >
+        <TextView
+            android:text="立即支付"
+            android:textSize="@dimen/text_size_xlarge"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

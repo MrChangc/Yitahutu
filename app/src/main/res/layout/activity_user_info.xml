@@ -19,7 +19,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 android:text="头像"
-                android:textSize="@dimen/text_size_xlarge"
+                android:textSize="@dimen/text_size_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <ImageView
@@ -38,7 +38,7 @@
             <TextView
                 android:textColor="@color/black"
                 android:text="昵称"
-                android:textSize="@dimen/text_size_xlarge"
+                android:textSize="@dimen/text_size_large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <FrameLayout
@@ -46,14 +46,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:textSize="@dimen/text_size_xlarge"
+                    android:background="@null"
+                    android:minWidth="60dp"
+                    android:minHeight="30dp"
+                    android:textSize="@dimen/text_size_large"
                     android:textColor="@color/black"
                     android:visibility="gone"
                     android:id="@+id/edit_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:textSize="@dimen/text_size_xlarge"
+                    android:textSize="@dimen/text_size_large"
                     android:textColor="@color/black"
                     android:id="@+id/text_user_name"
                     android:layout_width="wrap_content"
@@ -73,7 +76,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 android:text="性别"
-                android:textSize="@dimen/text_size_xlarge"
+                android:textSize="@dimen/text_size_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <RadioGroup
@@ -82,7 +85,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:text="男"
-                    android:textSize="@dimen/text_size_xlarge"
+                    android:textSize="@dimen/text_size_large"
                     android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -96,7 +99,7 @@
                 <TextView
                     android:layout_marginLeft="10dp"
                     android:text="女"
-                    android:textSize="@dimen/text_size_xlarge"
+                    android:textSize="@dimen/text_size_large"
                     android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -120,7 +123,7 @@
             <TextView
                 android:textColor="@color/black"
                 android:text="地区"
-                android:textSize="@dimen/text_size_xlarge"
+                android:textSize="@dimen/text_size_large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <FrameLayout
@@ -129,14 +132,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:textSize="@dimen/text_size_xlarge"
+                    android:background="@null"
+                    android:minWidth="60dp"
+                    android:minHeight="30dp"
+                    android:textSize="@dimen/text_size_large"
                     android:textColor="@color/black"
                     android:visibility="gone"
                     android:id="@+id/edit_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:textSize="@dimen/text_size_xlarge"
+                    android:textSize="@dimen/text_size_large"
                     android:textColor="@color/black"
                     android:id="@+id/text_address"
                     android:layout_width="wrap_content"
@@ -145,6 +151,7 @@
 
         </RelativeLayout>
         <LinearLayout
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:layout_marginTop="25dp"
             android:padding="15dp"
@@ -156,7 +163,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 android:text="我的地址"
-                android:textSize="@dimen/text_size_xlarge"
+                android:textSize="@dimen/text_size_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <ImageView
@@ -166,6 +173,7 @@
                 android:src="@mipmap/user_info_add" />
         </LinearLayout>
         <LinearLayout
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:layout_marginTop="2dp"
             android:padding="15dp"
@@ -177,7 +185,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 android:text="我的银行卡"
-                android:textSize="@dimen/text_size_xlarge"
+                android:textSize="@dimen/text_size_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <ImageView

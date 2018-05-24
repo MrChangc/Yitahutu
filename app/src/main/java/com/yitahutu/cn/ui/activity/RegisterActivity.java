@@ -15,6 +15,8 @@ import com.yitahutu.cn.Utils.CountDownTimerUtils;
 import com.yitahutu.cn.Utils.MachUtil;
 import com.yitahutu.cn.webservice.WebService;
 
+import java.net.HttpURLConnection;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -96,4 +98,5 @@ public class RegisterActivity extends BaseActivity {
         Intent intent = new Intent(this, PrivacyContextActivity.class);
         startActivity(intent);
     }
+
 }

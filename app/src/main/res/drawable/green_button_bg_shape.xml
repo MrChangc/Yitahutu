@@ -4,5 +4,4 @@
     <corners android:radius="5.0dip" />
     <stroke android:color="@color/title_back_ground" />
     <solid android:color="@color/title_back_ground" />
-
 </shape>

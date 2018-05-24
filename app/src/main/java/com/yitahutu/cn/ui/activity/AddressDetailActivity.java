@@ -1,5 +1,6 @@
 package com.yitahutu.cn.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import com.yitahutu.cn.Utils.MachUtil;
 import com.yitahutu.cn.model.AddressModel;
 import com.yitahutu.cn.model.JsonBean;
 import com.yitahutu.cn.model.JsonFileReader;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.json.JSONArray;
@@ -69,7 +71,7 @@ public class AddressDetailActivity extends BaseActivity {
             Toast.makeText(mContext, "请填写详细地址!", Toast.LENGTH_SHORT).show();
         else if (postalCode == null || TextUtils.isEmpty(postalCode))
             Toast.makeText(mContext, "请填写邮政编码!", Toast.LENGTH_SHORT).show();
-        else if (!MachUtil.isNumber(postalCode))
+        else if (MachUtil.isNumber(postalCode))
             Toast.makeText(mContext, "请填写邮政编码!", Toast.LENGTH_SHORT).show();
         else {
             addressModel.setName(userName);
@@ -78,8 +80,19 @@ public class AddressDetailActivity extends BaseActivity {
             addressModel.setDetailAddress(addressDetail);
             addressModel.setZipCode(Integer.valueOf(postalCode));
             addressModel.save();
-            WebService.updateAddress(mContext, addressModel.getId() + "",
-                    userName, phone, address, addressDetail, postalCode);
+            WebService.updateAddress(mContext,
+                    userName, phone, address, addressDetail, postalCode, new SuccessCallBack() {
+                        @Override
+                        public void callBack() {
+                            Intent intent =new Intent(AddressDetailActivity.this,AddressListActivity.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void callBackToObject(Object o) {
+
+                        }
+                    });
         }
     }
 

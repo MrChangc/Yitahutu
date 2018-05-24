@@ -17,6 +17,7 @@ import com.yitahutu.cn.Utils.PreferUtil;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.model.UserInfoModel;
 import com.yitahutu.cn.webservice.JsonObjectCallBack;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,6 +57,12 @@ public class UserLoginActivity extends BaseActivity {
         setContentView("账号登录", R.layout.activity_login);
         ButterKnife.bind(this);
         setRightTextVisibility(true);
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     public void login(View view) {
@@ -114,7 +121,18 @@ public class UserLoginActivity extends BaseActivity {
                                             if (userInfoModel != null)
                                                 userInfoModel.save();
                                             EventBus.getDefault().post(new Event.UserInfoEvent());
-                                            WebService.getAddressList(mContext);
+                                            WebService.getAddressList(mContext, new SuccessCallBack() {
+                                                @Override
+                                                public void callBack() {
+                                                    Intent intent =new Intent(UserLoginActivity.this,MainActivity.class);
+                                                    startActivity(intent);
+                                                }
+
+                                                @Override
+                                                public void callBackToObject(Object o) {
+
+                                                }
+                                            });
                                         }
                                     } catch (JSONException e) {
                                         message = "请求错误";
@@ -154,7 +172,7 @@ public class UserLoginActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(true);
+            startActivity(new Intent(UserLoginActivity.this,MainActivity.class));
             return true;
         }
         return super.onKeyDown(keyCode, event);

@@ -27,6 +27,7 @@ import com.yitahutu.cn.ui.activity.RechargeActivity;
 import com.yitahutu.cn.ui.activity.SettingActivity;
 import com.yitahutu.cn.ui.activity.ShoppingActivity;
 import com.yitahutu.cn.ui.activity.SignActivity;
+import com.yitahutu.cn.ui.activity.UserInfoActivity;
 import com.yitahutu.cn.ui.activity.UserLoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -168,7 +169,7 @@ public class UserInfoFragment extends Fragment {
     @OnClick(R.id.user_info_head_image)
     public void setImageView() {
         if (PreferUtil.isLogin()) {
-            Intent intent = new Intent(getActivity(), SettingActivity.class);
+            Intent intent = new Intent(getActivity(), UserInfoActivity.class);
             getActivity().startActivity(intent);
         } else {
             Intent intent = new Intent(getActivity(), UserLoginActivity.class);

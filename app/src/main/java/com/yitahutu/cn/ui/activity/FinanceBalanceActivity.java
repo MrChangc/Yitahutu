@@ -16,10 +16,12 @@ import com.yitahutu.cn.MyApplication;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.Utils.Event;
+import com.yitahutu.cn.Utils.PayUtils;
 import com.yitahutu.cn.model.AddressModel;
 import com.yitahutu.cn.model.FinanceDetailModel;
 import com.yitahutu.cn.model.FinanceModel;
 import com.yitahutu.cn.ui.View.PaymentDialog;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -212,8 +214,24 @@ public class FinanceBalanceActivity extends BaseActivity {
 //        if (MyApplication.getUserInfoModel() != null) {
         PaymentDialog paymentDialog = new PaymentDialog(mContext, new PaymentDialog.BalanceOnClick() {
             @Override
-            public void onBalance() {
-                WebService.financeAdopt( "3", financeId,number+"",mContext);
+            public void onBalance(final String type) {
+                WebService.financeAdopt(type, financeId, number + "", mContext, new SuccessCallBack() {
+                    @Override
+                    public void callBack() {
+                            Intent intent = new Intent(mContext, BuySuccessActivity.class);
+                            intent.putExtra("id", goodsId);
+                            startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void callBackToObject(Object o) {
+                        if (type.equals("2")){
+                            String order = (String) o;
+                            PayUtils.weiChatPay(mContext,order);
+                        }
+                    }
+                });
             }
         });
         paymentDialog.create();

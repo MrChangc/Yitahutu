@@ -140,6 +140,9 @@ public class SignActivity extends BaseActivity implements SuccessCallBack {
                     buttonSign.setText("每日签到");
                     buttonSign.setBackgroundColor(SignActivity.this.getResources().getColor(R.color.title_back_ground));
                     buttonSign.setTextColor(SignActivity.this.getResources().getColor(R.color.white));
+                    Toast.makeText(mContext,"未连续签到!",Toast.LENGTH_SHORT).show();
+//                    buttonSign.setText("未连续签到");
+                    textDataNumber.setText("0 天");
                 }
             }
         }

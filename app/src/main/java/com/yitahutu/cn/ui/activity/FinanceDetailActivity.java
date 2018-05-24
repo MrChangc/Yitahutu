@@ -1,7 +1,9 @@
 package com.yitahutu.cn.ui.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -16,11 +18,16 @@ import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.squareup.picasso.Picasso;
+import com.yitahutu.cn.MyApplication;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.ConstantUtils;
+import com.yitahutu.cn.Utils.PayUtils;
 import com.yitahutu.cn.Utils.PreferUtil;
 import com.yitahutu.cn.model.FinanceDetailModel;
 import com.yitahutu.cn.model.FinanceModel;
+import com.yitahutu.cn.ui.View.PaymentDialog;
+import com.yitahutu.cn.webservice.SuccessCallBack;
+import com.yitahutu.cn.webservice.WebService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +78,7 @@ public class FinanceDetailActivity extends BaseActivity implements OnItemClickLi
     private FinanceDetailModel financeDetailModel;
     private ConvenientBanner convenientBanner;
     private List<String> images = new ArrayList<>();
+    private long id;
 
     @Override
     void setRightIconListener() {
@@ -80,7 +88,7 @@ public class FinanceDetailActivity extends BaseActivity implements OnItemClickLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long id = getIntent().getLongExtra("finance_id", -1);
+        id = getIntent().getLongExtra("finance_id", -1);
         long detail_id = getIntent().getLongExtra("detail_id", -1);
         if (detail_id != -1)
             financeDetailModel = FinanceDetailModel.findById(FinanceDetailModel.class, detail_id);
@@ -142,24 +150,14 @@ public class FinanceDetailActivity extends BaseActivity implements OnItemClickLi
     }
 
     private void balance() {
-        if (checkboxAgree.isChecked()){
-
-            if (PreferUtil.isLogin()){
-                Intent intent = new Intent(mContext, FinanceBalanceActivity.class);
-                Bundle bundle = new Bundle();
-                if (financeModel != null)
-                    bundle.putSerializable("finance", financeModel);
-                else if (financeDetailModel != null)
-                    bundle.putSerializable("finance", financeDetailModel);
-                intent.putExtras(bundle);
-                intent.putExtra("number",Integer.valueOf(textCount.getText().toString()));
-                intent.putExtra("id",financeModel.getId());
-                startActivity(intent);
-            }else {
-                Toast.makeText(mContext,"请先登录!",Toast.LENGTH_SHORT).show();
+        if (checkboxAgree.isChecked()) {
+            if (PreferUtil.isLogin()) {
+                showPaymentDialog();
+            } else {
+                Toast.makeText(mContext, "请先登录!", Toast.LENGTH_SHORT).show();
             }
-        }else {
-            Toast.makeText(mContext,"请勾选协议!",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mContext, "请勾选协议!", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -250,5 +248,39 @@ public class FinanceDetailActivity extends BaseActivity implements OnItemClickLi
                     .load(data)
                     .into(imageView);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void showPaymentDialog() {
+//        if (MyApplication.getUserInfoModel() != null) {
+        PaymentDialog paymentDialog = new PaymentDialog(mContext, new PaymentDialog.BalanceOnClick() {
+            @Override
+            public void onBalance(final String type) {
+                WebService.financeAdopt(type, id + "", textCount.getText().toString(), mContext, new SuccessCallBack() {
+                    @Override
+                    public void callBack() {
+                        Intent intent = new Intent(mContext, BuySuccessActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void callBackToObject(Object o) {
+                        if (type.equals("2")) {
+                            String order = (String) o;
+                            PayUtils.weiChatPay(mContext, order);
+                        }
+                    }
+                });
+            }
+        });
+        paymentDialog.create();
+        if (MyApplication.getUserInfoModel() != null) {
+            paymentDialog.setTextNumber(MyApplication.getUserInfoModel().getName());
+        }
+        paymentDialog.setTextCount(financeModel.getPrice() * (Integer.valueOf(textCount.getText().toString()))+ "");
+        paymentDialog.setTextType("牛币");
+        paymentDialog.show();
+//        }else
+//            Toast.makeText(getActivity(), "请先登录!", Toast.LENGTH_SHORT).show();
     }
 }

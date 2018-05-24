@@ -18,11 +18,13 @@ import com.yitahutu.cn.MyApplication;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.ConstantUtils;
 import com.yitahutu.cn.Utils.Event;
+import com.yitahutu.cn.Utils.PayUtils;
 import com.yitahutu.cn.model.AddressModel;
 import com.yitahutu.cn.model.CartListModel;
 import com.yitahutu.cn.model.GoodsModel;
 import com.yitahutu.cn.ui.View.PaymentDialog;
 import com.yitahutu.cn.ui.adapter.MallBalanceAdapter;
+import com.yitahutu.cn.webservice.SuccessCallBack;
 import com.yitahutu.cn.webservice.WebService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -85,7 +87,7 @@ public class MallBalanceActivity extends BaseActivity {
     private String goodsId;
     private String idGoods;
     private int num;
-
+    private final int REQUEST_PAY = 666;
     @Override
     void setRightIconListener() {
 
@@ -99,7 +101,7 @@ public class MallBalanceActivity extends BaseActivity {
         ArrayList<CartListModel> cartListModels = (ArrayList<CartListModel>) getIntent().getExtras().getSerializable("list");
         cartList = getIntent().getStringExtra("id_list");
         goodsId = getIntent().getStringExtra("id");
-        num = getIntent().getIntExtra("number",1);
+        num = getIntent().getIntExtra("number", 1);
         goodsModel = (GoodsModel) getIntent().getExtras().getSerializable("goods");
         ButterKnife.bind(this);
         if (cartListModels != null) {
@@ -114,8 +116,8 @@ public class MallBalanceActivity extends BaseActivity {
         llGoodsInfo.setVisibility(View.VISIBLE);
         textGoodsName.setText(goodsModel.getName());
         textGoodsPrice.setText("￥ " + goodsModel.getPresentPrice());
-        textCount.setText(num+"");
-        textTotal.setText(goodsModel.getPresentPrice()*num + "");
+        textCount.setText(num + "");
+        textTotal.setText(goodsModel.getPresentPrice() * num + "");
         Picasso.with(mContext).load(ConstantUtils.baseUrl + goodsModel.getCoverUrl()).into(imageGoods);
     }
 
@@ -128,7 +130,7 @@ public class MallBalanceActivity extends BaseActivity {
         llGoodsInfo.setVisibility(View.GONE);
         balanceAdapter = new MallBalanceAdapter(cartListModels, mContext, textTotal);
         listBalance.setAdapter(balanceAdapter);
-        textTotal.setText(price*num + "");
+        textTotal.setText(price * num + "");
     }
 
     @OnClick({R.id.ll_address_info, R.id.payment, R.id.image_add, R.id.image_minus})
@@ -148,6 +150,7 @@ public class MallBalanceActivity extends BaseActivity {
                 if (goodsModel != null) {
                     num++;
                     textCount.setText(num + "");
+                    textTotal.setText(num * goodsModel.getPresentPrice() + "");
                 }
                 break;
             case R.id.image_minus:
@@ -155,6 +158,7 @@ public class MallBalanceActivity extends BaseActivity {
                     if (num > 1) {
                         num--;
                         textCount.setText(num + "");
+                        textTotal.setText(num * goodsModel.getPresentPrice() + "");
                     } else
                         Toast.makeText(mContext, "个数不能少于1!", Toast.LENGTH_SHORT).show();
                 }
@@ -177,7 +181,9 @@ public class MallBalanceActivity extends BaseActivity {
                 textPhoneNumber.setText(addressModel.getPhone());
                 isCheck = true;
                 addressId = addressModel.getId() + "";
-                break;
+                llInfo.setVisibility(View.VISIBLE);
+                textAddNew.setVisibility(View.GONE);
+                return;
             }
         }
         if (!isCheck) {
@@ -208,12 +214,11 @@ public class MallBalanceActivity extends BaseActivity {
 //        if (MyApplication.getUserInfoModel() != null) {
         PaymentDialog paymentDialog = new PaymentDialog(mContext, new PaymentDialog.BalanceOnClick() {
             @Override
-            public void onBalance() {
-
-                if (goodsId != null && !TextUtils.isEmpty(goodsId))
-                    WebService.buyGoods(addressId, goodsId, textCount.getText().toString(), "0", mContext);
-                else if (cartList != null && !TextUtils.isEmpty(cartList))
-                    WebService.buyCart(addressId, cartList, "0", mContext);
+            public void onBalance(final String type) {
+                if ("0".equals(type)) {
+                    startActivityForResult(new Intent(MallBalanceActivity.this,PayNiuActivity.class),REQUEST_PAY);
+                } else
+                    buyGoods(type);
             }
         });
         paymentDialog.create();
@@ -227,6 +232,29 @@ public class MallBalanceActivity extends BaseActivity {
 //            Toast.makeText(getActivity(), "请先登录!", Toast.LENGTH_SHORT).show();
     }
 
+    private void buyGoods(final String type) {
+        if (goodsId != null && !TextUtils.isEmpty(goodsId))
+
+            WebService.buyGoods(addressId, goodsId, textCount.getText().toString(), type, mContext, new SuccessCallBack() {
+                @Override
+                public void callBack() {
+                    Intent intent = new Intent(mContext, BuySuccessActivity.class);
+                    intent.putExtra("id", goodsId);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void callBackToObject(Object o) {
+                    if (type.equals("2")) {
+                        String order = (String) o;
+                        PayUtils.weiChatPay(mContext, order);
+                    }
+                }
+            });
+        else if (cartList != null && !TextUtils.isEmpty(cartList))
+            WebService.buyCart(addressId, cartList, type, mContext);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void gotoBuySuccessActivity(Event.BuyGoodsEvent buyGoodsEvent) {
         Intent intent = new Intent(mContext, BuySuccessActivity.class);
@@ -238,5 +266,10 @@ public class MallBalanceActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
     }
 }

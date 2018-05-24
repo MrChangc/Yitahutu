@@ -31,4 +31,4 @@ public class PrivacyContextActivity extends BaseActivity {
         mWebView.getSettings().setTextSize(WebSettings.TextSize.LARGER);
         mWebView.loadUrl("file:///android_asset/privacy_context.html");
     }
-}
+}  

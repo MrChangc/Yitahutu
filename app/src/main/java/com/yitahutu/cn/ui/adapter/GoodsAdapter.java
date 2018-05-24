@@ -64,7 +64,7 @@ public class GoodsAdapter extends BaseAdapter {
         }
         final GoodsModel goodsModel = goodsModels.get(i);
         viewHolder.textName.setText(goodsModel.getName());
-        viewHolder.textPrice.setText(goodsModel.getOriginalPrice() + "");
+        viewHolder.textPrice.setText(goodsModel.getPresentPrice() + "");
         viewHolder.textSlogan.setText(goodsModel.getName());
         viewHolder.textSloganBottom.setText(goodsModel.getIntroduce());
         viewHolder.imageAddCart.setOnClickListener(new View.OnClickListener() {

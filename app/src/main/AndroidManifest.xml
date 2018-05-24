@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -28,7 +29,7 @@
             android:value="false" />
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="com.yitahutu.cn.model" />
+            android:value="com.yitahutu.cn" />
 
         <activity
             android:name=".ui.activity.MainActivity"
@@ -60,7 +61,16 @@
         <activity android:name=".ui.activity.ConsumeListActivity" />
         <activity android:name=".ui.activity.RefundActivity" />
         <activity android:name=".ui.activity.MallBalanceActivity" />
-        <activity android:name=".ui.activity.TestActivity" />
+        <activity android:name=".ui.activity.AddEvaluateActivity"/>
+        <activity android:name=".ui.activity.PayNiuActivity"/>
+        <activity android:name=".ui.activity.SecondLevelActivity"/>
+        <activity android:name=".ui.activity.TestActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="wx4bd3c0ec831f0b78"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.activity.MessageActivity" />
         <activity android:name=".ui.activity.FinanceDetailListActivity" />
         <activity android:name=".ui.activity.PrivacyContextActivity" />
@@ -68,6 +78,9 @@
         <activity android:name=".ui.activity.ReChargeDetailActivity" />
         <activity android:name=".ui.activity.SignActivity" />
         <activity android:name=".ui.activity.HongBaoActivity" />
+        <activity android:name=".ui.activity.HappyPatureActivity" />
+        <activity android:name=".ui.activity.MemberMallActivity" />
+
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
@@ -95,6 +108,16 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
                 <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <activity android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+        </activity>
+        <receiver
+            android:name=".wxapi.AppRegister">
+            <intent-filter>
+                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
             </intent-filter>
         </receiver>
     </application>

@@ -8,13 +8,25 @@ android {
         applicationId "com.yitahutu.cn"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 10002
-        versionName "1.1"
+        versionCode 10003
+        versionName "1.0.3"
+    }
+    signingConfigs {
+        config {
+            keyAlias 'ytht'
+            keyPassword '123456'
+            storeFile file('E:/AS_workspace/Yitahutu/app/ytht.jks')
+            storePassword '123456'
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 }

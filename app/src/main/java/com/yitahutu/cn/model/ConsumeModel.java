@@ -22,7 +22,7 @@ public class ConsumeModel extends SugarRecord implements Serializable{
      */
 
     private long creatTime;
-    private int money;
+    private double money;
     private String paymentMethod;
     private String paymentNum;
     private String record;
@@ -38,11 +38,11 @@ public class ConsumeModel extends SugarRecord implements Serializable{
         this.creatTime = creatTime;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 

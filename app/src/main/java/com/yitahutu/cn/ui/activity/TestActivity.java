@@ -5,18 +5,27 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alipay.sdk.app.PayTask;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.yitahutu.cn.R;
 import com.yitahutu.cn.Utils.ConstantUtils;
+import com.yitahutu.cn.Utils.PhoneUtils;
 import com.yitahutu.cn.model.JsonBean;
 import com.yitahutu.cn.model.JsonFileReader;
+import com.yitahutu.cn.webservice.SuccessCallBack;
+import com.yitahutu.cn.webservice.WebService;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -34,24 +43,75 @@ public class TestActivity extends Activity {
     private ArrayList<JsonBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void dispatchMessage(Message msg) {
             super.dispatchMessage(msg);
         }
     };
+    private IWXAPI api;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
+        api = WXAPIFactory.createWXAPI(TestActivity.this, "wx4bd3c0ec831f0b78", false);
+        api.registerApp("wx4bd3c0ec831f0b78");
 //        initJsonData();
     }
 
     @OnClick(R.id.text)
     public void onViewClicked() {
 //        showPickerView();
-        aplay();
+//        aplay();
+        wPlay();
+//        wanYunke();
+    }
+
+    private void wPlay() {
+        WebService.getWeixin(this, new SuccessCallBack() {
+            @Override
+            public void callBack() {
+
+            }
+
+            @Override
+            public void callBackToObject(Object o) {
+                final String s = (String) o;
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject json = new JSONObject(s);
+                            String ip = PhoneUtils.getIPAddress(TestActivity.this);
+                            PayReq req = new PayReq();
+//                    request.appId = "wx4bd3c0ec831f0b78";
+//                    request.partnerId = "1495025432";
+//                    request.prepayId = "wx20171227142307928b4a667d0815025300";
+//                    request.nonceStr = "854e3288b9f84c708d5834de2dc9891c";
+//                    request.packageValue = "Sign=WXPay";
+//                    request.timeStamp = "1514355784";
+//                    request.sign = "0CF1F24A94054349BBD8006CD4238BE8";
+                            req.appId = json.getString("appid");
+                            req.partnerId = json.getString("partnerid");
+                            req.prepayId = json.getString("prepayid");
+                            req.nonceStr = json.getString("noncestr");
+                            req.timeStamp = json.getString("timestamp");
+                            req.packageValue = "Sign=WXPay";
+                            req.sign = json.getString("sign");
+                            api.sendReq(req);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+                runnable.run();
+            }
+        });
+
+
     }
 
     private void aplay() {
@@ -60,7 +120,7 @@ public class TestActivity extends Activity {
             @Override
             public void run() {
                 PayTask alipay = new PayTask(TestActivity.this);
-                Map<String,String> result = alipay.payV2(ConstantUtils.ORDER_NUMBER,true);
+                Map<String, String> result = alipay.payV2(ConstantUtils.ORDER_NUMBER, true);
 
                 Message msg = new Message();
                 msg.what = 1;
@@ -128,8 +188,9 @@ public class TestActivity extends Activity {
             options3Items.add(Province_AreaList);
         }
     }
+
     private void showPickerView() {
-        OptionsPickerView pvOptions=new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+        OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
@@ -149,6 +210,7 @@ public class TestActivity extends Activity {
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
     }
+
     public ArrayList<JsonBean> parseData(String result) {//Gson 解析
         ArrayList<JsonBean> detail = new ArrayList<>();
         try {
@@ -163,5 +225,8 @@ public class TestActivity extends Activity {
             // mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
         }
         return detail;
+    }
+    private void wanYunke(){
+
     }
 }

@@ -111,7 +111,7 @@ public class GoodsDetailGoodsFragment extends Fragment implements OnItemClickLis
             textPriceFavourable.setText("￥ "+goodsModel.getOriginalPrice());
             textSynopsis.setText(goodsModel.getIntroduce());
             textGoodsTotal.setText("￥ " + (goodsModel.getPresentPrice() * Integer.valueOf(textGoodsCount.getText().toString())));
-            if (goodsModel.getMonthSales()!=null)
+            if (goodsModel.getMonthSales()==null)
                 monthSales.setText(""+0);
             else
                 monthSales.setText(goodsModel.getMonthSales()+"");

@@ -113,16 +113,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.contact_radio3)
     public void setContactRadio3() {
-        getSupportFragmentManager().beginTransaction().hide(fragmentMain).commit();
-        getSupportFragmentManager().beginTransaction().hide(fragmentPasture).commit();
-        getSupportFragmentManager().beginTransaction().show(fragmentMall).commit();
-        getSupportFragmentManager().beginTransaction().hide(fragmentUser).commit();
-        contactRadio1.setChecked(false);
-        contactRadio2.setChecked(false);
-        contactRadio3.setChecked(true);
-        contactRadio4.setChecked(false);
-        setMiddleText("商场");
-        setRightIconVisibility(true);
+        gotoMall();
     }
 
     @OnClick(R.id.contact_radio4)
@@ -165,5 +156,17 @@ public class MainActivity extends BaseActivity {
             );
             System.exit(0);
         }
+    }
+    public void gotoMall(){
+        getSupportFragmentManager().beginTransaction().hide(fragmentMain).commit();
+        getSupportFragmentManager().beginTransaction().hide(fragmentPasture).commit();
+        getSupportFragmentManager().beginTransaction().show(fragmentMall).commit();
+        getSupportFragmentManager().beginTransaction().hide(fragmentUser).commit();
+        contactRadio1.setChecked(false);
+        contactRadio2.setChecked(false);
+        contactRadio3.setChecked(true);
+        contactRadio4.setChecked(false);
+        setMiddleText("商场");
+        setRightIconVisibility(true);
     }
 }

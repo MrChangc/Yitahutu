@@ -49,9 +49,9 @@ public class FinancingActivity extends BaseActivity {
         ButterKnife.bind(this);
         setMiddleText("理财明细");
         setRightIconVisibility(false);
-        if(MyApplication.getUserInfoModel()!=null){
+        if (MyApplication.getUserInfoModel() != null) {
             textUserName.setText(MyApplication.getUserInfoModel().getName());
-            Picasso.with(mContext).load(ConstantUtils.baseUrl+MyApplication.getUserInfoModel().getUrl()).into(imageUserHead);
+            Picasso.with(mContext).load(ConstantUtils.baseUrl + MyApplication.getUserInfoModel().getUrl()).into(imageUserHead);
         }
 
     }
